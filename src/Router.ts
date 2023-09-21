@@ -1,3 +1,4 @@
+import { lstatSync } from "fs"
 import { readdir } from "fs/promises"
 
 export class Router {
@@ -58,6 +59,25 @@ export class Router {
             if (filename === 'index.html') {
                 const indexRoute = fileRoute.replace('index.html', '')
                 this.addFileRoute(indexRoute, filePath)
+            }
+        }
+    }
+
+    async useDirectoryRecursive(route: string, path: string) {
+        const filesname = await readdir(path)
+        for (const filename of filesname) {
+            const filePath = path + filename
+            const fileRoute = route + filename
+            const stat = lstatSync(filePath)
+            if (stat.isDirectory()) {
+                this.useDirectoryRecursive(fileRoute + '/', filePath + '/')
+            } else {
+                this.addFileRoute(fileRoute, filePath)
+                // if file is index.html, add route without index.html
+                if (filename === 'index.html') {
+                    const indexRoute = fileRoute.replace('index.html', '')
+                    this.addFileRoute(indexRoute, filePath)
+                }
             }
         }
     }

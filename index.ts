@@ -10,12 +10,9 @@ router.addRoute('/ADMIN/clear', clearDatabase);
 router.addRoute('/API/createQuiz', createQuiz);
 
 // Quiz Master
-router.useDirectory('/', './public/quizMaster/');
+router.useDirectoryRecursive('/', './public/quizMaster/');
 router.addFavIcon('/favicon.ico', './public/quizMaster/favicon.ico');
-router.useDirectory('/fonts/', './public/quizMaster/fonts/');
 
-router.useDirectory('/quiz/', './public/quizMaster/quiz/');
-router.useDirectory('/create/', './public/quizMaster/create/');
 
 Bun.serve({
   async fetch(req) {
