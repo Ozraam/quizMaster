@@ -6,7 +6,7 @@ export class DBManager {
     private db: Database;
     
     private constructor() {
-        this.db = new Database('./database/quizmaster.sqlite');
+        this.db = new Database('./src/database/quizmaster.sqlite');
     }
     
     static getInstance(): DBManager {
