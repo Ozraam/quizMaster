@@ -1,15 +1,12 @@
-# apiquizmaster
+# Quiz master V0.0.0
 
-To install dependencies:
+## Table of Contents
 
-```bash
-bun install
-```
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
 
-To run:
+## About <a name = "about"></a>
 
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+This is a school project for my third Year. It purporse is to use the knowledge that I acquired during web development in the first semester.
+This web project consist of a webpage where you can do quiz or create them.
