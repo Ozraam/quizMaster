@@ -1,13 +1,10 @@
-import { clearDatabase, createQuiz, getQuiz, getQuizzes } from "./src/API";
+import { clearDatabase, createQuiz, getQuiz, getQuizzes } from "./src/API/APIQuiz";
+import { setAPIRoute } from "./src/API/APIRouter";
 import { Router } from "./src/Router";
 
 const router = new Router();
 
-// API
-router.addRoute('/API/getQuiz', getQuiz);
-router.addRoute('/API/getQuizzes', getQuizzes);
-router.addRoute('/ADMIN/clear', clearDatabase);
-router.addRoute('/API/createQuiz', createQuiz);
+setAPIRoute(router);
 
 // Quiz Master
 router.useDirectoryRecursive('/', './public/quizMaster/');

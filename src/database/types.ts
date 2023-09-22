@@ -20,3 +20,9 @@ export type Quiz = {
     modified: Date;
     questions: Question[];
 }
+
+export type User = {
+    id: number;
+    username: string;
+    password: string;
+}
