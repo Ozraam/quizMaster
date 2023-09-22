@@ -24,7 +24,6 @@ export async function signup(req: Request) : Promise<Response> {
 }
 
 export async function logout(req: Request) : Promise<Response> {
-    console.log(',fknofnaojn');
     const body = await req.json() as { token: string };
     
     auth.logout(body.token);

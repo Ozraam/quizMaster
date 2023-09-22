@@ -90,8 +90,6 @@ export class Auth {
     }
 
     logout(token: string) {
-        console.log("logout " + token);
-        
         this.db.query(`
         DELETE FROM sessions WHERE token = $token
         `).run({ $token: token });

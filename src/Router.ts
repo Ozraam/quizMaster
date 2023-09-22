@@ -5,7 +5,6 @@ export class Router {
     
     routes: Map<string, (req: Request) => Promise<Response>>
     constructor() {
-        console.log('Router')
         this.routes = new Map()
     }
 
