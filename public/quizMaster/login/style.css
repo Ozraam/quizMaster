@@ -40,12 +40,19 @@ main {
     top: 50%;
     transform: translateY(-50%);
     transition: all 0.2s ease-in-out;
+    pointer-events: none;
 }
 
 .input-before:focus-within::before {
     top: 0;
     transform: translateY(0);
 }
+/* TODO : :has variant for firefox */
+.input-before:has(> .input:not(:placeholder-shown)):before {
+    top: 0;
+    transform: translateY(0);
+}
+
 
 .username::before {
     content: "Username";

@@ -28,7 +28,8 @@ export class Router {
     }
 
     addFileRoute(route: string, path: string) {
-        console.log('Add file route', route, path);
+        const count = this.routes.size
+        console.log(count, 'Add file route ', path, '->', route);
         
         this.addRoute(route, async (req: Request) => {
             const url = new URL(req.url)

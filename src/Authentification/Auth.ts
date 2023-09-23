@@ -14,6 +14,7 @@ export class Auth {
     }
 
     signup(username: string, password: string) {
+        username = username.toLowerCase();
         // check if user already exists
         const user = this.db.query(`
             SELECT * FROM users WHERE username = $username
@@ -35,6 +36,7 @@ export class Auth {
     }
 
     async login(username: string, password: string): Promise<string | LoginError> {
+        username = username.toLowerCase();
         const user = await this.db.query(`
             SELECT * FROM users WHERE username = $username
         `).get({ $username: username }) as { usename: string, password: string, id: number };
