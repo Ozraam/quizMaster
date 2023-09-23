@@ -5,6 +5,7 @@
 
 .container {
     max-width: 400px;
+    position: relative;
 }
 
 body {
@@ -83,4 +84,16 @@ main {
     background-color: black;
     color: white;
     font-weight: bold;
+}
+
+.switch-btn {
+    background-color: transparent;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+}
+
+.switch-btn:hover {
+    text-decoration: blue underline;    
+    color: blue;
 }
