@@ -14,6 +14,8 @@ document.querySelector('.login-form').addEventListener('submit', async (e) => {
     } else if (response.status === 401) {
         document.querySelector('.error').innerHTML = 'Incorrect password';
     } else if (response.status === 200) {
+        const token = await response.json();
+        localStorage.setItem('token', token.token);
         window.location.replace('/dashboard');
     }
 });

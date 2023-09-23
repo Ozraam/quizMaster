@@ -26,8 +26,8 @@ export class Auth {
 
         Bun.password.hash(password).then((hash) => {
             this.db.query(`
-                INSERT INTO users (username, password)
-                VALUES ($username, $password)
+                INSERT INTO users (username, password, created)
+                VALUES ($username, $password, datetime('now'))
             `).run({
                 $username: username,
                 $password: hash
@@ -60,6 +60,7 @@ export class Auth {
         return token;
     }
 
+    // TODO : Use JWT instead of random string
     generateSessionToken(): string {
         let randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         // check if token already exists
@@ -85,10 +86,11 @@ export class Auth {
 
     getUser(token: string): User | null {
         const user = this.db.query(`
-            SELECT users.username, users.id FROM users
+            SELECT users.username, users.id, created FROM users
             INNER JOIN sessions ON sessions.user_id = users.id
             WHERE sessions.token = $token
         `).get({ $token: token }) as User;
+        
         if (!user) return null;
         return user;
     }
