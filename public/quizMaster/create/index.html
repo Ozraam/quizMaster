@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untitled | Create your Quiz !</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../fonts/fonts.css">
+    <link rel="stylesheet" href="../header.css">
+    <meta name="description" content="Create your own quiz !">
+</head>
+
+<body>
+    <header>
+        <a class="title" href="../">
+            QUIZ MASTER
+        </a>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="../" class="nav-link">Home</a>
+                </li>
+                <li>
+                    <a href="../" class="nav-link">Quiz</a>
+                </li>
+                <li>
+                    <a href="./" class="nav-link">Create</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>
+            Create your quiz !
+        </h1>
+
+        <form action="">
+            <div class="form-group">
+                <label for="quiz-title">Quiz title :</label>
+                <input type="text" name="quiz-title" id="quiz-title" placeholder="Untitled">
+            </div>
+            <div class="form-group">
+                <label for="quiz-description">Quiz description :</label>
+                <textarea name="quiz-description" id="quiz-description" cols="30" rows="10"
+                    placeholder="Description"></textarea>
+            </div>
+        </form>
+
+        <h2>
+            Questions
+        </h2>
+
+        <template id="question-template">
+            <li class="question">
+                <h3 class="question-number">
+                    Question 1
+                </h3>
+
+                <button class="delete-question-button">
+                    X
+                </button>
+
+                <div class="question-content">
+                    <div class="question-text">
+                        <label for="question-text">Question text :</label>
+                        <input type="text" name="question-text" id="question-text" placeholder="Question text" class="question-text">
+                    </div>
+                </div>
+                <h3>
+                    Answers
+                    <button aria-label="Add answer" class="add-answer-button">
+                        +
+                    </button>
+                </h3>
+                <ul class="answer-list">
+                    
+                </ul>
+            </li>
+        </template>
+
+        <template id="answer-template">
+            <li class="answer">
+                <div class="answer-content">
+                    <div class="answer-correct">
+                        <input type="radio" name="answer-correct" class="answer-correct" checked>
+                    </div>
+                    <input type="text" name="answer-text" class="answer-text" placeholder="Answer text">
+                    <button aria-label="Delete answer" class="delete-answer-button">
+                        X
+                    </button>
+                </div>
+            </li>
+        </template>
+
+        <ul class="question-list">
+            <li class="question ignore">
+                <button aria-label="Add question" class="add-question-button">
+                    +
+                </button>
+            </li>
+        </ul>
+
+        <button class="submit-button">
+            Submit
+        </button>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

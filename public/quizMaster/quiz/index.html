@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz master | Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../header.css">
+    <!-- font link -->
+    <link rel="stylesheet" href="../fonts/fonts.css">
+    <meta name="description" content="Quiz page of quizmaster">
+</head>
+
+<body>
+    <header>
+        <a class="title" href="../">
+            QUIZ MASTER
+        </a>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li>
+                    <a href="../login" class="nav-link">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="quiz-title">
+            QUIZ : 01
+        </h1>
+        <div class="progress-bar">
+            <span class="progress-bar-foreground">
+                0 / 0
+            </span>
+        </div>
+        <h2 class="subtitle">
+            Question 1
+        </h2>
+
+        <template class="answer-template">
+            <li>
+                <button class="answer">
+                    <span class="answer-text">
+                        answer text
+                    </span>
+                </button>
+            </li>
+        </template>
+
+        <template class="question-template">
+            <div class="question">
+                <p class="question-text">
+                    Comment s'appelle le créateur de PHP ?
+                </p>
+
+                <ul class="answer-container">
+
+                </ul>
+            </div>
+        </template>
+
+        <div class="quiz-container">
+
+        </div>
+
+        <div class="hide" id="end">
+            <h3>
+                Good job!
+            </h3>
+            <p class="end-text">
+                You have completed the quiz!
+            </p>
+            <p class="end-text">
+                Your score is <span class="score">0</span> / <span class="total-score">0</span>
+            </p>
+        </div>
+
+        <template class="final-answer-template">
+            <li>
+                <p class="final-answer">
+                    <span class="final-answer-question">
+                        question text
+                    </span>
+                    Answer :
+                    <span class="final-answer-text">
+                        answer text
+                    </span>
+                    Your answer :
+                    <span class="final-answer-user">
+                        user answer
+                    </span>
+                </p>
+            </li>
+        </template>
+
+        <div class="final-answers hide">
+            <h3>
+                Answers
+            </h3>
+            <ul class="final-answers-list">
+
+            </ul>
+        </div>
+
+        <div class="controls">
+            <button class="btn hide" id="previous">Previous</button>
+            <button class="btn hide" id="submit">Submit</button>
+            <a href="/" class="hide backHome">Back to home</a>
+        </div>
+    </main>
+
+    <script src="Quiz.js"></script>
+    <script src="script.js" type="module"></script>
+    <script src="../version.js"></script>
+</body>
+
+</html>
