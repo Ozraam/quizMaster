@@ -19,8 +19,10 @@ export class Auth {
         const user = this.db.query(`
             SELECT * FROM users WHERE username = $username
         `).get({ $username: username }) as { username: string };
+        console.log(user);
+        
         if (user) return false;
-
+        
 
         Bun.password.hash(password).then((hash) => {
             this.db.query(`
@@ -95,5 +97,11 @@ export class Auth {
         this.db.query(`
         DELETE FROM sessions WHERE token = $token
         `).run({ $token: token });
+    }
+
+    clearUsers() {
+        this.db.query(`
+            DELETE FROM users
+        `).run();
     }
 }

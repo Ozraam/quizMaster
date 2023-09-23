@@ -4,7 +4,7 @@ import { User } from "../database/types";
 const auth = new Auth();
 
 export async function login(req: Request) : Promise<Response> {
-    if(req.method !== "POST") return new Response("Method not allowed", { status: 200 });
+    if(req.method !== "POST") return new Response("Method not allowed", { status: 405 });
     const body = await req.json() as User;
     const token = await auth.login(body.username, body.password);
     if (token === LoginError.UserNotFound) {
@@ -17,7 +17,7 @@ export async function login(req: Request) : Promise<Response> {
 }
 
 export async function signup(req: Request) : Promise<Response> {
-    if(req.method !== "POST") return new Response("Method not allowed", { status: 200 });
+    if(req.method !== "POST") return new Response("Method not allowed", { status: 405 });
     const body = await req.json() as User;
     if(!auth.signup(body.username, body.password)) {
         return new Response("User already exists", { status: 409 });
@@ -26,9 +26,24 @@ export async function signup(req: Request) : Promise<Response> {
 }
 
 export async function logout(req: Request) : Promise<Response> {
-    if(req.method !== "POST") return new Response("Method not allowed", { status: 200 });
+    if(req.method !== "POST") return new Response("Method not allowed", { status: 405 });
     const body = await req.json() as { token: string };
     
     auth.logout(body.token);
     return new Response("Logged out", { status: 200 });
+}
+
+export async function clearUsers(req: Request) : Promise<Response> {
+    auth.clearUsers();
+    return new Response("OK", { status: 200 });
+}
+
+export async function getUser(req: Request) : Promise<Response> {
+    if(req.method !== "POST") return new Response("Method not allowed", { status: 405 });
+    const body = await req.json() as { token: string };
+    const user = auth.getUser(body.token);
+    if (!user) {
+        return new Response("User not found", { status: 404 });
+    }
+    return new Response(JSON.stringify(user), { status: 200 });
 }
