@@ -20,12 +20,16 @@ export class Router {
         const route = url.pathname
         const handler = this.routes.get(route)
         if (handler) {
+            
             return handler(req)
         }
+        console.log(date, 'Route not found');
         return new Promise(() => new Response('Not Found', { status: 404 }))
     }
 
     addFileRoute(route: string, path: string) {
+        console.log('Add file route', route, path);
+        
         this.addRoute(route, async (req: Request) => {
             const url = new URL(req.url)
             const filePath = url.pathname.replace(route, path)
@@ -58,6 +62,8 @@ export class Router {
             if (filename === 'index.html') {
                 const indexRoute = fileRoute.replace('index.html', '')
                 this.addFileRoute(indexRoute, filePath)
+                const indexRoute2 = fileRoute.replace('/index.html', '')
+                this.addFileRoute(indexRoute2, filePath)
             }
         }
     }
@@ -76,6 +82,8 @@ export class Router {
                 if (filename === 'index.html') {
                     const indexRoute = fileRoute.replace('index.html', '')
                     this.addFileRoute(indexRoute, filePath)
+                    const indexRoute2 = fileRoute.replace('/index.html', '')
+                    this.addFileRoute(indexRoute2, filePath)
                 }
             }
         }
