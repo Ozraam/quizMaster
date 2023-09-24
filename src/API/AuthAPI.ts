@@ -40,8 +40,15 @@ export async function clearUsers(req: Request) : Promise<Response> {
 
 export async function getUser(req: Request) : Promise<Response> {
     if(req.headers.get("Authorization") && !auth.isSessionValid(req.headers.get("Authorization")!.split(" ")[1])) {
+        auth.logout(req.headers.get("Authorization")!.split(" ")[1]);
         return new Response("Unauthorized", { status: 401 });
     }
+
+    if(!req.headers.get("Authorization")) {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    if(req.method !== "GET") return new Response("Method not allowed", { status: 405 });
 
     const token = req.headers.get("Authorization")!.split(" ")[1];
     const user = auth.getUser(token);

@@ -9,7 +9,40 @@
     <link rel="stylesheet" href="../fonts/fonts.css">
 </head>
 <body>
-    User Dashboard
+    <header>
+        <p class="title">
+            QUIZ MASTER
+        </p>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li>
+                    <a href="../login" class="nav-link">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>
+            User dashboard
+        </h1>
+        <h2 class="username">
+            Welcome, <span id="username"></span>
+        </h2>
+        <div class="info">
+            <!-- For the moment the only information is username and the date of creation of the account -->
+            <p>
+                Username: <span id="username-info" class="info-span"></span>
+            </p>
+            <p>
+                Date of creation: <span id="date-info" class="info-span"></span>
+            </p>
+        </div>
+    </main>
 
     <script src="./dashboard/script.js"></script>
 </body>

@@ -5,6 +5,12 @@
     padding: 0;
 }
 
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .nav ul li {
     list-style: none;
 }
@@ -13,6 +19,8 @@ header {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    position: absolute;
+    padding: 10px 20px;
 }
 
 header .nav-link {
@@ -40,4 +48,6 @@ body {
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }

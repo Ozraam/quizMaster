@@ -10,5 +10,8 @@
   },
   "scripts": {
     "start": "bun --watch run index.ts"
+  },
+  "dependencies": {
+    "jose": "^4.14.6"
   }
 }

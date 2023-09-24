@@ -1,3 +1,5 @@
+/// <reference lib="dom" />
+
 //get token in local storage
 var token = localStorage.getItem('token');
 
@@ -11,7 +13,9 @@ fetch('/API/getUser', {
         window.location.replace('/login');
     } else if (response.status === 200) {
         response.json().then((data) => {
-            console.log(data);
+            document.querySelector('#username').innerHTML = data.username;
+            document.querySelector('#username-info').innerHTML = data.username;
+            document.querySelector('#date-info').innerHTML = new Date(data.created).toLocaleDateString();
         });
     }
 });
