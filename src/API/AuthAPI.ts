@@ -1,5 +1,6 @@
 import { Auth, LoginError } from "../Authentification/Auth";
-import { User } from "../database/types";
+import { DBManager } from "../database/dbManager";
+import { Score, User } from "../database/types";
 
 const auth = new Auth();
 
@@ -56,5 +57,26 @@ export async function getUser(req: Request) : Promise<Response> {
     if (!user) {
         return new Response("User not found", { status: 404 });
     }
-    return new Response(JSON.stringify(user), { status: 200 });
+
+    user.scores = new Map<number, Score>();
+
+    // get all scores of user
+    const scores = DBManager.getInstance().getScoresOfUser(user.id);
+    
+    scores.forEach(score => {
+        user.scores.set(score.quizId, score);
+    });
+    
+    return new Response(JSON.stringify(user, replacer), { status: 200 });
 }
+
+function replacer(key: any, value: any) {
+    if(value instanceof Map) {
+      return {
+        dataType: 'Map',
+        value: Array.from(value.entries()), // or with spread: value: [...value]
+      };
+    } else {
+      return value;
+    }
+  }

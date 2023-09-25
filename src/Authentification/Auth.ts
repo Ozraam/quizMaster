@@ -19,7 +19,6 @@ export class Auth {
         const user = this.db.query(`
             SELECT * FROM users WHERE username = $username
         `).get({ $username: username }) as { username: string };
-        console.log(user);
         
         if (user) return false;
         

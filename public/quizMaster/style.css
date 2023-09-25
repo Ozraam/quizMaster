@@ -10,6 +10,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 6em;
 }
 
 .slogan {
@@ -23,12 +24,14 @@ main {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    padding-top: 40px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
 .quiz-card {
+    position: relative;
     width: 100%;
     max-width: 250px;
     margin: 0 auto;
@@ -44,7 +47,6 @@ main {
 
 .quiz-card-title {
     margin-top: 0;
-    margin-bottom: 10px;
     font-size: 1.2rem;
     font-weight: 500;
 }
@@ -78,4 +80,24 @@ main {
     height: 1px;
     background-color: #ccc;
     margin: 20px 0;
+}
+
+.hide {
+    display: none;
+}
+
+.player-score {
+    right: 10px;
+    border: 1px solid #0F0;
+    background-color: rgba(0, 255, 0, 0.2);
+    border-radius: 10px;
+    padding: 4px;
+    font-size: small;
+}
+
+.quiz-card-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }

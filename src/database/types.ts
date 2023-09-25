@@ -26,6 +26,7 @@ export type User = {
     username: string;
     password: string;
     created: Date;
+    scores: Map<number, Score>;
 }
 
 export type Score = {

@@ -60,7 +60,6 @@ document.querySelector('.signup-form').addEventListener('submit', async (e) => {
         body: JSON.stringify(data),
     });
     // status code 409 = username already exists
-    console.log(response.status);
     if (response.status === 409) {
         document.querySelector('.error').innerHTML = 'Username already exists';
     } else if (response.status === 201) {

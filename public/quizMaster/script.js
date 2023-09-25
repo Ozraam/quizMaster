@@ -1,4 +1,6 @@
-// fetch all quizzes from the API
+import { Auth } from "./Auth.js";
+
+const user = await Auth.getUser();
 
 try {
     const res = await fetch(
@@ -18,6 +20,15 @@ try {
             quizCard.querySelector('.quiz-card-description').innerText = quiz.description;
             quizCard.querySelector('.quiz-card-button').href = `quiz/?id=${quiz.id}`;
             quizCard.querySelector('.quiz-card-button').innerText = 'Start Quiz ' + quiz.id;
+
+            if(user && user.scores.has(quiz.id)) {
+                const userScore = user.scores.get(quiz.id);
+                quizCard.querySelector('.player-score').innerText = 'Score: ' + userScore.score + ' / ' + quiz.questions.length;
+                quizCard.querySelector('.player-score').classList.remove('hide');
+            }
+
+
+
             quizList.appendChild(quizCard);
         }
     } else {

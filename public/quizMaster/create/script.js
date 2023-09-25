@@ -90,7 +90,6 @@ document.querySelector('.submit-button').addEventListener('click', (e) => {
     };
 
     questions.forEach((question) => {
-        console.log(question.querySelector('.question-text'));
         const questionText = question.querySelector('input.question-text').value.trim();
         if (questionText == "") {
             alert('Please enter a question');

@@ -168,4 +168,9 @@ export class DBManager {
 
         return new Response("Updated", { status: 200 });
     }
+
+    getScoresOfUser(id: number) {
+        const scores = this.db.query(`SELECT * FROM score WHERE userId = ?1`).all(id) as Score[];
+        return scores;
+    }
 }

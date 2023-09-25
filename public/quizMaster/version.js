@@ -1,4 +1,4 @@
-const version = '1.2.0';
+const version = '2.0.0';
 const versionDiv = document.createElement('div');
 versionDiv.classList.add('version');
 versionDiv.innerText = `Version: ${version}`;

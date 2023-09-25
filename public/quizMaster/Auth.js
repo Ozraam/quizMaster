@@ -13,10 +13,18 @@ export class Auth {
         })
 
         if (res.ok) {
-            return await res.json();
+            return JSON.parse(await res.text(), reviver);
         } else {
             return null;
         }
     }
+}
 
+function reviver(key, value) {
+    if (typeof value === 'object' && value !== null) {
+        if (value.dataType === 'Map') {
+            return new Map(value.value);
+        }
+    }
+    return value;
 }
