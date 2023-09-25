@@ -141,8 +141,20 @@ class Quiz {
         const scoreEl = document.querySelector(".score");
         this.score = this.getScore();
         scoreEl.innerText = this.score;
-        document.querySelector(".total-score").innerText = this.questions.length + 
-            " : " + (this.score / this.questions.length * 100).toFixed(0) + "%";
+        document.querySelector(".total-score").innerText = this.questions.length + " : " + (this.score / this.questions.length * 100).toFixed(0) + "%";
+
+        // SAVE SCORE TO DATABASE
+        fetch('/API/saveScore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
+            body: JSON.stringify({
+                quizId: this.questions[0].quiz_id,
+                score: this.score,
+            }),
+        })
         
 
 

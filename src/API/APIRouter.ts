@@ -1,5 +1,5 @@
 import { Router } from "../Router";
-import { clearDatabase, createQuiz, getQuiz, getQuizzes } from "./APIQuiz";
+import { clearDatabase, createQuiz, getQuiz, getQuizzes, updateScoreOfUser } from "./APIQuiz";
 import { clearUsers, getUser, login, logout, signup } from "./AuthAPI";
 
 const route = {
@@ -12,7 +12,8 @@ const route = {
     '/API/login': login,
     '/API/signup': signup,
     '/API/logout': logout,
-    '/API/getUser': getUser
+    '/API/getUser': getUser,
+    '/API/saveScore': updateScoreOfUser,
 }
 
 export function setAPIRoute(router: Router) {

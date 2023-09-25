@@ -1,4 +1,6 @@
 import { DBManager } from "../database/dbManager";
+import { User } from "../database/types";
+import { getUser } from "./AuthAPI";
 
 const dbManager = DBManager.getInstance();
 
@@ -35,4 +37,21 @@ export async function createQuiz(req:Request) {
     const quizId = dbManager.createQuiz(quiz);
 
     return new Response(JSON.stringify({id: quizId.id}), { status: 200 });
+}
+
+export async function updateScoreOfUser(req: Request) {
+    if(req.method !== "POST") return new Response("Method not allowed", { status: 200 });
+
+    const body = await req.json();
+
+    const quizId = body.quizId;
+    const userRes = await getUser(req);
+    if(userRes.status !== 200) return userRes;
+
+    const user = await userRes.json() as User;
+
+    const score = body.score;
+
+    return dbManager.updateScoreOfUser(quizId, user, score);
+
 }

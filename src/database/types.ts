@@ -27,3 +27,10 @@ export type User = {
     password: string;
     created: Date;
 }
+
+export type Score = {
+    id: number;
+    quizId: number;
+    userId: number;
+    score: number;
+}

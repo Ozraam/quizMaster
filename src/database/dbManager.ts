@@ -1,5 +1,5 @@
 import { Database } from 'bun:sqlite';
-import { Answer, Question, Quiz } from './types';
+import { Answer, Question, Quiz, User, Score } from './types';
 
 export class DBManager {
     private static instance: DBManager;
@@ -146,5 +146,26 @@ export class DBManager {
         }
         
         return quizId;
+    }
+
+    updateScoreOfUser(quizId: number, user: User, score: number) {
+        // update score of user in database if score is higher than previous score
+        const quiz = this.db.query(`SELECT * FROM quiz WHERE id = ?1`).get(quizId) as Quiz;
+        
+        if(!quiz) return new Response("Quiz Not Found", { status: 404 });
+
+        // check if score is higher than previous score
+        const scoreInDB = this.db.query(`SELECT * FROM score WHERE quizId = ?1 AND userId = ?2`).get(quizId, user.id) as Score;
+
+        if(scoreInDB) {
+            if(scoreInDB.score < score) {
+                this.db.query(`UPDATE score SET score = ?1 WHERE id = ?2`).run(score, scoreInDB.id);
+            }
+        } else {
+            this.db.query(`INSERT INTO score (quizId, userId, score) VALUES (?1, ?2, ?3)`)
+                .run(quizId, user.id, score);
+        }
+
+        return new Response("Updated", { status: 200 });
     }
 }
