@@ -19,3 +19,14 @@ fetch('/API/getUser', {
         });
     }
 });
+
+document.querySelector('#logout-btn').addEventListener('click', () => {
+    fetch('/API/logout', {
+        method: 'POST',
+        headers: { 
+            'Authorization': 'Bearer ' + token,
+        },
+    })
+    localStorage.removeItem('token');
+    window.location.replace('/login');
+});

@@ -18,3 +18,18 @@ main {
     margin-bottom: 10px;
     font-weight: 500;
 }
+
+.btn {
+    margin-top: 2em;
+    font-size: large;
+    background-color: transparent;
+    padding: 10px;
+    border: 1px solid #a8a8a8;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.btn:hover {
+    border-color: black;
+}

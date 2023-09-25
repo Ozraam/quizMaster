@@ -26,10 +26,12 @@ export async function signup(req: Request) : Promise<Response> {
 }
 
 export async function logout(req: Request) : Promise<Response> {
-    if(req.method !== "POST") return new Response("Method not allowed", { status: 405 });
-    const body = await req.json() as { token: string };
-    
-    auth.logout(body.token);
+    if(!req.headers.get("Authorization")) return new Response("Need a token to logout", { status: 401 });
+
+    const token = req.headers.get("Authorization")!.split(" ")[1];
+
+    auth.logout(token);
+
     return new Response("Logged out", { status: 200 });
 }
 

@@ -1,3 +1,5 @@
+import { Auth } from "../Auth.js";
+
 document.querySelector('.login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.querySelector('#username').value;
@@ -67,3 +69,9 @@ document.querySelector('.signup-form').addEventListener('submit', async (e) => {
         document.querySelector('.error').innerHTML = 'Account created successfully';
     }
 });
+
+Auth.getUser().then((user) => {
+    if (user) {
+        window.location.replace('/dashboard');
+    }
+})
