@@ -173,4 +173,24 @@ export class DBManager {
         const scores = this.db.query(`SELECT * FROM score WHERE userId = ?1`).all(id) as Score[];
         return scores;
     }
+
+    clearQuizzes() {
+        this.db.query(`DELETE FROM quiz`).run();
+        this.db.query(`DELETE FROM question`).run();
+        this.db.query(`DELETE FROM answer`).run();
+        return new Response("", { status: 204 });
+    }
+
+    clearQuiz(quizId: number) {
+        if(!quizId) return new Response("No quizId given", { status: 400 });
+        this.db.query(`DELETE FROM quiz WHERE id = ?1`).run(quizId);
+        this.db.query(`DELETE FROM question WHERE quiz_id = ?1`).run(quizId);
+        this.db.query(`DELETE FROM answer WHERE question_id = ?1`).run(quizId);
+        return new Response("", { status: 204 });
+    }
+
+    getAllUsers() {
+        const users = this.db.query(`SELECT * FROM users`).all() as User[];
+        return users;
+    }
 }

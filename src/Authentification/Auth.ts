@@ -104,5 +104,9 @@ export class Auth {
         this.db.query(`
             DELETE FROM users
         `).run();
+
+        this.db.query(`
+            DELETE FROM sessions
+        `).run();
     }
 }

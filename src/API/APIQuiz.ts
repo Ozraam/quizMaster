@@ -55,3 +55,9 @@ export async function updateScoreOfUser(req: Request) {
     return dbManager.updateScoreOfUser(quizId, user, score);
 
 }
+
+export async function clearQuizzes(req: Request) : Promise<Response> {
+    
+
+    return dbManager.clearQuizzes();
+}

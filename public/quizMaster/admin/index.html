@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration</title>
+    <link rel="stylesheet" href="/admin/style.css">
+    <link rel="stylesheet" href="./header.css">
+    <!-- font link -->
+    <link rel="stylesheet" href="./fonts/fonts.css">
+    <meta name="description" content="Administration page of quizmaster">
+</head>
+<body>
+    <header>
+        <p class="title">
+            QUIZ MASTER
+        </p>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li>
+                    <a href="/login" class="nav-link">Login</a>
+                </li>
+                <li>
+                    <a href="/create" class="nav-link">Create</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>
+            Administration
+        </h1>
+        <div>
+            <h2>
+                Options
+            </h2>
+            <div class="option">
+                <p>
+                    Clear quiz
+                </p>
+                <Button class="button" id="clearQuiz">
+                    Clear
+                </Button>
+            </div>
+            <div class="option">
+                <p>
+                    Clear users
+                </p>
+                <Button class="button" id="clearUsers">
+                    Clear
+                </Button>
+            </div>
+            <div class="option-users">
+                <p>
+                    Edit users
+                </p>
+                <template class="user-card-template">
+                    <li>
+                        <p class="user-card-title"></p>
+                        <a href="" class="user-card-button"></a>
+                    </li>
+                </template>
+                <ul class="user-list">
+
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <script src="/admin/script.js"></script>
+</body>
+</html>
