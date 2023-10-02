@@ -1,11 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>User</title>
+    <link rel="stylesheet" href="/user/style.css">
+    <link rel="stylesheet" href="/header.css">
+    <!-- font link -->
+    <link rel="stylesheet" href="/fonts/fonts.css">
 </head>
+
 <body>
-    
+    <header>
+        <p class="title">
+            QUIZ MASTER
+        </p>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="/" class="nav-link">Home</a>
+                </li>
+                <li>
+                    <a href="/login" class="nav-link">Login</a>
+                </li>
+                <li>
+                    <a href="/create" class="nav-link">Create</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form action="" method="POST" class="user-form">
+            <div class="user-form-inputs">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username">
+            </div>
+            <div class="user-form-inputs">
+                <label for="date">User created</label>
+                <input type="date" name="date" id="date" readonly>
+            </div>
+            <button type="submit">
+                Save
+            </button>
+            <button type="button" class="delete">
+                Delete
+            </button>
+        </form>
+    </main>
+
+    <script src="./script.js"></script>
 </body>
+
 </html>

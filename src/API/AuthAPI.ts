@@ -74,6 +74,30 @@ export async function getAllUsers() {
     return new Response(JSON.stringify(DBManager.getInstance().getAllUsers()), { status:200 })
 }
 
+export async function getUserWithId(req: Request) {
+    const id = (await req.json()).id;
+    
+
+    const userWithId = DBManager.getInstance().getUserWithId(id);
+
+    if (!userWithId) {
+        return new Response("User not found", { status: 404 });
+    }
+
+    userWithId.scores = new Map<number, Score>();
+
+    // get all scores of user
+    const scores = DBManager.getInstance().getScoresOfUser(userWithId.id);
+
+    scores.forEach(score => {
+        userWithId.scores.set(score.quizId, score);
+    });
+
+    userWithId.password = "";
+
+    return new Response(JSON.stringify(userWithId, replacer), { status: 200 });
+}
+
 function replacer(key: any, value: any) {
     if (value instanceof Map) {
         return {
@@ -83,4 +107,22 @@ function replacer(key: any, value: any) {
     } else {
         return value;
     }
+}
+
+export async function deleteUser(req: Request) {
+    const id = (await req.json()).id;
+
+    DBManager.getInstance().deleteUser(id);
+
+    return new Response("", { status: 204 });
+}
+
+export async function updateUser(req: Request) {
+    const user = (await req.json()) as User;
+
+    if(!DBManager.getInstance().updateUser(user)) {
+        return new Response("User not found", { status: 404 });
+    }
+
+    return new Response("", { status: 204 });
 }

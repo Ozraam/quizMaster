@@ -193,4 +193,21 @@ export class DBManager {
         const users = this.db.query(`SELECT * FROM users`).all() as User[];
         return users;
     }
+
+    getUserWithId(id: number) {
+        const user = this.db.query(`SELECT * FROM users WHERE id = ?1`).get(id) as User;
+        return user;
+    }
+
+    updateUser(user: User) : boolean {
+        const userInDB = this.db.query(`SELECT * FROM users WHERE id = ?1`).get(user.id);
+        if(!userInDB) return false;
+        this.db.query(`UPDATE users SET username = ?1 WHERE id = ?2`)
+            .run(user.username, user.id);
+        return true;
+    }
+
+    deleteUser(id: any) {
+        this.db.query(`DELETE FROM users WHERE id = ?1`).run(id);
+    }
 }
