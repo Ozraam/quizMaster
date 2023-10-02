@@ -33,8 +33,29 @@ document.querySelector('.user-form').addEventListener('submit', (e) => {
             id: userid,
             username: username,
         })
-    }).then(res => res.json().then((user) => {
-        console.log(user);
+    }).then(res => {
+        if (res.ok) {
+            window.location.href = '/admin';
+        } else {
+            console.error('Failed to update user');
+        }
+    });
+});
+
+document.querySelector('.delete').addEventListener('click', () => {
+    if (!confirm('Are you sure you want to delete this user?')) {
+        return;
+    }
+
+    fetch('/API/ADMIN/deleteUser', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: userid,
+        })
+    }).then(res => {
         window.location.href = '/admin';
-    }))
+    });
 });
