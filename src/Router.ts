@@ -4,6 +4,8 @@ import { readdir } from "fs/promises"
 export class Router {
     
     routes: Map<string, (req: Request) => Promise<Response>>
+    middlewares: ((req: Request) => {ok: boolean, response: Promise<Response> | null})[] = []
+
     constructor() {
         this.routes = new Map()
     }
@@ -16,6 +18,12 @@ export class Router {
         const url = new URL(req.url)
         const date = `[${new Date().toLocaleString()}]`
         console.log(date, req.method, url.pathname);
+
+        for (const middleware of this.middlewares) {
+            const res = middleware(req)
+            if (!res.ok) return res.response!
+        }
+
         
         const route = url.pathname
         const handler = this.routes.get(route)
@@ -87,5 +95,9 @@ export class Router {
                 }
             }
         }
+    }
+
+    addMiddleware(middleware: (req: Request) => {ok: boolean, response: Promise<Response> | null}) {
+        this.middlewares.push(middleware)
     }
 }

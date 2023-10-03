@@ -85,7 +85,7 @@ export class Auth {
 
     getUser(token: string): User | null {
         const user = this.db.query(`
-            SELECT users.username, users.id, created FROM users
+            SELECT users.username, users.id, created, role FROM users
             INNER JOIN sessions ON sessions.user_id = users.id
             WHERE sessions.token = $token
         `).get({ $token: token }) as User;

@@ -29,12 +29,17 @@ try {
 
 
             quizCard.querySelector('.quiz-card-button-delete').addEventListener('click', async () => {
-                if (!confirm('Are you sure you want to delete this quiz?')) {
+                if (!user || !confirm('Are you sure you want to delete this quiz?')) {
                     return;
                 }
             
                 const res = await fetch(
                     'API/ADMIN/deleteQuiz?id=' + quiz.id,
+                    {
+                        headers: {
+                            'Authorization': 'Bearer ' + user.token,
+                        }
+                    }
                 )
                 if (res.ok) {
                     window.location.reload();

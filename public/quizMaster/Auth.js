@@ -13,7 +13,9 @@ export class Auth {
         })
 
         if (res.ok) {
-            return JSON.parse(await res.text(), reviver);
+            const user = JSON.parse(await res.text(), reviver);
+            user.token = token;
+            return user;
         } else {
             return null;
         }

@@ -1,7 +1,11 @@
 document.querySelector("#clearQuiz").addEventListener("click", () => {
     if (confirm("Are you sure you want to clear the quiz?")) {
         document.querySelector("#clearQuiz").disabled = true;
-        fetch("/API/ADMIN/clearQuizzes")
+        fetch("/API/SUPERADMIN/clearQuizzes", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        })
         .then((res) => {
             if(res.ok) {
                 alert("Quiz cleared successfully");
@@ -17,7 +21,11 @@ document.querySelector("#clearQuiz").addEventListener("click", () => {
 document.querySelector("#clearUsers").addEventListener("click", () => {
     if (confirm("Are you sure you want to clear the Users?")) {
         document.querySelector("#clearUsers").disabled = true;
-        fetch("/API/ADMIN/clearUsers")
+        fetch("/API/SUPERADMIN/clearUsers", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        })
         .then((res) => {
             if(res.ok) {
                 alert("Users cleared successfullyUsers");

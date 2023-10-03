@@ -191,6 +191,9 @@ export class DBManager {
 
     getAllUsers() {
         const users = this.db.query(`SELECT * FROM users`).all() as User[];
+        users.forEach(user => {
+            user.password = "";
+        })
         return users;
     }
 
@@ -218,5 +221,18 @@ export class DBManager {
         this.db.query(`DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?1)`).run(quizId);
         this.db.query(`DELETE FROM question WHERE quiz_id = ?1`).run(quizId);
         return quiz;
+    }
+
+    updateUserRole(user: User) {
+        const userInDB = this.db.query(`SELECT * FROM users WHERE id = ?1`).get(user.id);
+        if(!userInDB) return false;
+        this.db.query(`UPDATE users SET role = ?1 WHERE id = ?2`)
+            .run(user.role, user.id);
+        return true;
+    }
+
+    getAllRoles() {
+        const roles = this.db.query(`SELECT * FROM roles`).all();
+        return roles;
     }
 }

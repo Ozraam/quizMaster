@@ -126,3 +126,13 @@ export async function updateUser(req: Request) {
 
     return new Response("", { status: 204 });
 }
+
+export async function updateUserRole(req: Request) {
+    const user = (await req.json()) as User;
+
+    if(!DBManager.getInstance().updateUserRole(user)) {
+        return new Response("User not found", { status: 404 });
+    }
+
+    return new Response("", { status: 204 });
+}
