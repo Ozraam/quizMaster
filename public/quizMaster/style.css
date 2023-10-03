@@ -101,3 +101,22 @@ main {
     align-items: center;
     margin-bottom: 10px;
 }
+
+.quiz-card-button-delete {
+    margin-top: 10px;
+    background-color: #f00;
+    color: #fff;
+    border: 1px solid #f00;
+    font-size: 1.05rem;
+    font-weight: bold;
+}
+
+.quiz-card-button-delete:hover {
+    background-color: #fff;
+    color: #f00;
+}
+
+.quiz-card-button-delete:active {
+    background-color: #f00;
+    color: #fff;
+}

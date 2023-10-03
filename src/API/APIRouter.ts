@@ -1,14 +1,14 @@
 import { Router } from "../Router";
-import { clearDatabase, createQuiz, getQuiz, getQuizzes, updateScoreOfUser, clearQuizzes } from "./APIQuiz";
+import { clearDatabase, createQuiz, getQuiz, getQuizzes, updateScoreOfUser, clearQuizzes, deleteQuiz } from "./APIQuiz";
 import { clearUsers, deleteUser, getAllUsers, getUser, getUserWithId, login, logout, signup, updateUser } from "./AuthAPI";
 
 const route = {
     '/API/': async () => new Response("API is running", { status: 200 }),
     '/API/getQuiz': getQuiz,
     '/API/getQuizzes': getQuizzes,
-    '/API/ADMIN/clear': clearDatabase,
-    '/API/ADMIN/clearUsers': clearUsers,
-    '/API/ADMIN/clearQuizzes': clearQuizzes,
+    '/API/SUPERADMIN/clear': clearDatabase,
+    '/API/SUPERADMIN/clearUsers': clearUsers,
+    '/API/SUPERADMIN/clearQuizzes': clearQuizzes,
     '/API/getUserWithId': getUserWithId,
     '/API/createQuiz': createQuiz,
     '/API/login': login,
@@ -18,7 +18,8 @@ const route = {
     '/API/getUsers': getAllUsers,
     '/API/saveScore': updateScoreOfUser,
     '/API/updateUser': updateUser,
-    '/API/ADMIN/deleteUser': deleteUser
+    '/API/ADMIN/deleteUser': deleteUser,
+    '/API/ADMIN/deleteQuiz': deleteQuiz
 }
 
 export function setAPIRoute(router: Router) {

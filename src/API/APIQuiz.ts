@@ -61,3 +61,15 @@ export async function clearQuizzes(req: Request) : Promise<Response> {
 
     return dbManager.clearQuizzes();
 }
+
+export async function deleteQuiz(req: Request) : Promise<Response> {
+    const url = new URL(req.url);
+    const quizId = url.searchParams.get("id");
+    if (quizId) {
+        const quiz = dbManager.deleteQuiz(quizId);
+        if (!quiz) return new Response("Not Found", { status: 404 });
+        return new Response(JSON.stringify(quiz), { status: 200 });
+    }
+
+    return new Response("Not Found", { status: 404 });
+}

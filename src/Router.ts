@@ -20,7 +20,6 @@ export class Router {
         const route = url.pathname
         const handler = this.routes.get(route)
         if (handler) {
-            
             return handler(req)
         }
         console.log(date, 'Route not found');

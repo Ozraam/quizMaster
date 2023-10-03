@@ -210,4 +210,13 @@ export class DBManager {
     deleteUser(id: any) {
         this.db.query(`DELETE FROM users WHERE id = ?1`).run(id);
     }
+
+    deleteQuiz(quizId: string) {
+        const quiz = this.getQuiz(quizId);
+        if(!quiz) return null;
+        this.db.query(`DELETE FROM quiz WHERE id = ?1`).run(quizId);
+        this.db.query(`DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?1)`).run(quizId);
+        this.db.query(`DELETE FROM question WHERE quiz_id = ?1`).run(quizId);
+        return quiz;
+    }
 }
