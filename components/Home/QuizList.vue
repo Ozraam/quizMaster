@@ -1,6 +1,18 @@
 <script setup lang="ts">
 const { data } = useFetch('/api/getQuizzes')
-const quizList = data
+const quizList = [{
+    id: 1,
+    title: 'Quiz 1',
+    description: 'This is the first quiz'
+}, {
+    id: 2,
+    title: 'Quiz 2',
+    description: 'This is the second quiz'
+}, {
+    id: 3,
+    title: 'Quiz 3',
+    description: 'This is the third quiz'
+}]
 
 </script>
 
@@ -13,10 +25,10 @@ const quizList = data
         <HomeQuizCard 
             :title="quiz.title"
             :description="quiz.description"
-            :id="quiz.id" 
-            :score="quiz.score" 
-            :max-score="quiz.maxScore" 
             v-for="quiz in quizList"
+            :idQuiz="quiz.id"
+            :score="0" 
+            :max-score="0" 
         />
     </div>
 </template>

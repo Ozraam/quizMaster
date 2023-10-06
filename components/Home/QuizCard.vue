@@ -16,11 +16,32 @@ const props = defineProps({
         type: Number,
         required: true
     },
-    id: {
-        type: String,
+    idQuiz: {
+        type: Number,
         required: true
     }
 })
+
+async function deleteQuiz() {
+    if (/*TODO !user ||*/ !confirm('Are you sure you want to delete this quiz?')) {
+        return;
+    }
+
+    const res = await useFetch(
+        '/api/ADMIN/deleteQuiz?id=' + props.idQuiz,
+        {
+            headers: {
+                'Authorization': 'Bearer ' /*TODO + user.token*/,
+            }
+        }
+    )
+    
+    if (!res.error.value) {
+        window.location.reload();
+    } else {
+        console.error('Failed to delete quiz');
+    }
+}
 </script>
 
 <template>
@@ -31,17 +52,17 @@ const props = defineProps({
                     {{ title }}
                 </h3>
 
-                <HomePlayerScore :score="score" :max-score="maxScore"/>
+                <HomePlayerScore :score="score" :max-score="maxScore" />
             </div>
             <p class="quiz-card-description">
                 {{ description }}
             </p>
         </span>
         <span class="quiz-card-button-container">
-            <a :href="'/quiz?id='+id" class="quiz-card-button">
+            <a :href="'/quiz?id=' + idQuiz" class="quiz-card-button">
                 Start
             </a>
-            <button class="quiz-card-button quiz-card-button-delete hide">
+            <button class="quiz-card-button quiz-card-button-delete" @click="deleteQuiz">
                 Delete
             </button>
         </span>

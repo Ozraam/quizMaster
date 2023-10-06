@@ -6,7 +6,7 @@ export class DBManager {
     private db: DatabseClass;
     
     private constructor() {
-        this.db = new Database('./utils/quizmaster.sqlite');
+        this.db = new Database('./server/utils/quizmaster.sqlite');
     }
     
     static getInstance(): DBManager {
@@ -28,12 +28,12 @@ export class DBManager {
         // question -> id, quiz_id, question
         // answer -> id, question_id, answer, correct
 
-        const quiz : Quiz = this.db.prepare(`SELECT * FROM quiz WHERE id = ?1`).get(quizId) as Quiz;
+        const quiz : Quiz = this.db.prepare(`SELECT * FROM quiz WHERE id = ?`).get(quizId) as Quiz;
         if(!quiz) return null;
-        const questions : Question[] = this.db.prepare(`SELECT * FROM question WHERE quiz_id = ?1`).all(quizId) as Question[];
+        const questions : Question[] = this.db.prepare(`SELECT * FROM question WHERE quiz_id = ?`).all(quizId) as Question[];
         if(!questions) return null;
         for(const question of questions) {
-            const answers = this.db.prepare(`SELECT * FROM answer WHERE question_id = ?1`).all(question.id) as Answer[];
+            const answers = this.db.prepare(`SELECT * FROM answer WHERE question_id = ?`).all(question.id) as Answer[];
             answers.forEach(answer => {
                 answer.correct = answer.correct == true;
             });
@@ -45,11 +45,11 @@ export class DBManager {
     }
 
     getQuizzes() {
-        const quizzes = [];
+        const quizzes : Quiz[] = [];
         const quizIds = this.db.prepare(`SELECT id FROM quiz`).all() as {id: string}[];
         for(const quizId of quizIds) {
             const quiz = this.getQuiz(quizId.id as string);
-            quizzes.push(quiz);
+            if(quiz) quizzes.push(quiz);
         }
 
         return quizzes;
@@ -62,7 +62,7 @@ export class DBManager {
     }
 
     createQuiz(quiz: Quiz) {
-        this.db.prepare(`INSERT INTO quiz (title, description, created, modified) VALUES (?1, ?2, ?3, ?4)`)
+        this.db.prepare(`INSERT INTO quiz (title, description, created, modified) VALUES (?, ?, ?, ?)`)
             .run(
                 quiz.title,
                 quiz.description,
@@ -71,7 +71,7 @@ export class DBManager {
         );
         const quizId = this.db.prepare(`SELECT id, created from quiz ORDER BY id DESC LIMIT 1`).get() as Quiz;
         for(const question of quiz.questions) {
-            this.db.prepare(`INSERT INTO question (question, quiz_id) VALUES (?1, ?2)`)
+            this.db.prepare(`INSERT INTO question (question, quiz_id) VALUES (?, ?)`)
                 .run( question.question,
                     quizId.id
                 );
@@ -91,19 +91,19 @@ export class DBManager {
 
     updateScoreOfUser(quizId: number, user: User, score: number) {
         // update score of user in database if score is higher than previous score
-        const quiz = this.db.prepare(`SELECT * FROM quiz WHERE id = ?1`).get(quizId) as Quiz;
+        const quiz = this.db.prepare(`SELECT * FROM quiz WHERE id = ?`).get(quizId) as Quiz;
         
         if(!quiz) return new Response("Quiz Not Found", { status: 404 });
 
         // check if score is higher than previous score
-        const scoreInDB = this.db.prepare(`SELECT * FROM score WHERE quizId = ?1 AND userId = ?2`).get(quizId, user.id) as Score;
+        const scoreInDB = this.db.prepare(`SELECT * FROM score WHERE quizId = ? AND userId = ?`).get(quizId, user.id) as Score;
 
         if(scoreInDB) {
             if(scoreInDB.score < score) {
-                this.db.prepare(`UPDATE score SET score = ?1 WHERE id = ?2`).run(score, scoreInDB.id);
+                this.db.prepare(`UPDATE score SET score = ? WHERE id = ?`).run(score, scoreInDB.id);
             }
         } else {
-            this.db.prepare(`INSERT INTO score (quizId, userId, score) VALUES (?1, ?2, ?3)`)
+            this.db.prepare(`INSERT INTO score (quizId, userId, score) VALUES (?, ?, ?)`)
                 .run(quizId, user.id, score);
         }
 
@@ -111,7 +111,7 @@ export class DBManager {
     }
 
     getScoresOfUser(id: number) {
-        const scores = this.db.prepare(`SELECT * FROM score WHERE userId = ?1`).all(id) as Score[];
+        const scores = this.db.prepare(`SELECT * FROM score WHERE userId = ?`).all(id) as Score[];
         return scores;
     }
 
@@ -124,9 +124,9 @@ export class DBManager {
 
     clearQuiz(quizId: number) {
         if(!quizId) return new Response("No quizId given", { status: 400 });
-        this.db.prepare(`DELETE FROM quiz WHERE id = ?1`).run(quizId);
-        this.db.prepare(`DELETE FROM question WHERE quiz_id = ?1`).run(quizId);
-        this.db.prepare(`DELETE FROM answer WHERE question_id = ?1`).run(quizId);
+        this.db.prepare(`DELETE FROM quiz WHERE id = ?`).run(quizId);
+        this.db.prepare(`DELETE FROM question WHERE quiz_id = ?`).run(quizId);
+        this.db.prepare(`DELETE FROM answer WHERE question_id = ?`).run(quizId);
         return new Response("", { status: 204 });
     }
 
@@ -139,35 +139,35 @@ export class DBManager {
     }
 
     getUserWithId(id: number) {
-        const user = this.db.prepare(`SELECT * FROM users WHERE id = ?1`).get(id) as User;
+        const user = this.db.prepare(`SELECT * FROM users WHERE id = ?`).get(id) as User;
         return user;
     }
 
     updateUser(user: User) : boolean {
-        const userInDB = this.db.prepare(`SELECT * FROM users WHERE id = ?1`).get(user.id);
+        const userInDB = this.db.prepare(`SELECT * FROM users WHERE id = ?`).get(user.id);
         if(!userInDB) return false;
-        this.db.prepare(`UPDATE users SET username = ?1 WHERE id = ?2`)
+        this.db.prepare(`UPDATE users SET username = ? WHERE id = ?`)
             .run(user.username, user.id);
         return true;
     }
 
     deleteUser(id: any) {
-        this.db.prepare(`DELETE FROM users WHERE id = ?1`).run(id);
+        this.db.prepare(`DELETE FROM users WHERE id = ?`).run(id);
     }
 
     deleteQuiz(quizId: string) {
         const quiz = this.getQuiz(quizId);
         if(!quiz) return null;
-        this.db.prepare(`DELETE FROM quiz WHERE id = ?1`).run(quizId);
-        this.db.prepare(`DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?1)`).run(quizId);
-        this.db.prepare(`DELETE FROM question WHERE quiz_id = ?1`).run(quizId);
+        this.db.prepare(`DELETE FROM quiz WHERE id = ?`).run(quizId);
+        this.db.prepare(`DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?)`).run(quizId);
+        this.db.prepare(`DELETE FROM question WHERE quiz_id = ?`).run(quizId);
         return quiz;
     }
 
     updateUserRole(user: User) {
-        const userInDB = this.db.prepare(`SELECT * FROM users WHERE id = ?1`).get(user.id);
+        const userInDB = this.db.prepare(`SELECT * FROM users WHERE id = ?`).get(user.id);
         if(!userInDB) return false;
-        this.db.prepare(`UPDATE users SET role = ?1 WHERE id = ?2`)
+        this.db.prepare(`UPDATE users SET role = ? WHERE id = ?`)
             .run(user.role, user.id);
         return true;
     }
