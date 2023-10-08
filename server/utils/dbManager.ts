@@ -1,5 +1,5 @@
 import Database, {Database as DatabseClass} from 'better-sqlite3';
-import { Answer, Question, Quiz, User, Score } from './types';
+import { Answer, Question, Quiz, User, Score } from '~/utils/types';
 
 export class DBManager {
     private static instance: DBManager;
@@ -72,17 +72,16 @@ export class DBManager {
         const quizId = this.db.prepare(`SELECT id, created from quiz ORDER BY id DESC LIMIT 1`).get() as Quiz;
         for(const question of quiz.questions) {
             this.db.prepare(`INSERT INTO question (question, quiz_id) VALUES (?, ?)`)
-                .run( question.question,
+                .run( question.text,
                     quizId.id
                 );
             const questionId = this.db.prepare(`SELECT * from question ORDER BY id DESC LIMIT 1`).get() as Question;
             for(const answer of question.answers) {
-                this.db.prepare(`INSERT INTO answer (answer, question_id, correct) VALUES ($answer, $question_id, $correct)`)
-                    .run({
-                        $answer: answer.answer,
-                        $question_id: questionId.id,
-                        $correct: answer.correct
-                    });
+                this.db.prepare(`INSERT INTO answer (answer, question_id, correct) VALUES (?, ?, ?)`)
+                    .run(answer.text,
+                         questionId.id,
+                         answer.correct
+                    );
             }
         }
         

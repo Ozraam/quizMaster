@@ -1,18 +1,6 @@
 <script setup lang="ts">
 const { data } = useFetch('/api/getQuizzes')
-const quizList = [{
-    id: 1,
-    title: 'Quiz 1',
-    description: 'This is the first quiz'
-}, {
-    id: 2,
-    title: 'Quiz 2',
-    description: 'This is the second quiz'
-}, {
-    id: 3,
-    title: 'Quiz 3',
-    description: 'This is the third quiz'
-}]
+const quizList = data;
 
 </script>
 

@@ -1,13 +1,13 @@
 export type Question = {
     id: number;
-    question: string;
+    text: string;
     quiz_id: number;
     answers: Answer[];
 }
 
 export type Answer = {
     id: number;
-    answer: string;
+    text: string;
     question_id: number;
     correct: boolean;
 }

@@ -11,15 +11,18 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "bun-types": "latest",
     "nuxt": "^3.7.4",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.5",
-    "bun-types": "latest"
+    "vue-router": "^4.2.5"
   },
   "dependencies": {
     "@types/better-sqlite3": "^7.6.5",
     "better-sqlite3": "^8.7.0",
-    "sass": "^1.68.0",
-    "sass-loader": "^13.3.2"
+    "bindings": "^1.5.0",
+    "prettier": "^3.0.3",
+    "sass": "^1.69.0",
+    "sass-loader": "^13.3.2",
+    "typescript": "^5.2.2"
   }
 }

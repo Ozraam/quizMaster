@@ -7,8 +7,9 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
+
   css: [
     '~/assets/scss/global.scss',
     '~/assets/fonts/fonts.css',
-  ]
+  ],
 })
