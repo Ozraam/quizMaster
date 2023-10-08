@@ -1,22 +1,22 @@
 <script setup lang="ts">
 const { data } = useFetch('/api/getQuizzes')
-const quizList = data;
-
+const quizList = data
 </script>
-
 
 <template>
     <p class="quiz-list-title">
-      Select a quiz below to start
+        Select a quiz below to start
     </p>
+
     <div class="quiz-list">
-        <HomeQuizCard 
+        <home-quiz-card
+            v-for="(quiz, index) in quizList"
+            :key="index"
             :title="quiz.title"
             :description="quiz.description"
-            v-for="quiz in quizList"
-            :idQuiz="quiz.id"
-            :score="0" 
-            :max-score="0" 
+            :id-quiz="quiz.id"
+            :score="0"
+            :max-score="0"
         />
     </div>
 </template>

@@ -1,15 +1,15 @@
-export type Question = {
-    id: number;
-    text: string;
-    quiz_id: number;
-    answers: Answer[];
-}
-
 export type Answer = {
     id: number;
     text: string;
     question_id: number;
     correct: boolean;
+}
+
+export type Question = {
+    id: number;
+    text: string;
+    quiz_id: number;
+    answers: Answer[];
 }
 
 export type Quiz = {
@@ -21,6 +21,13 @@ export type Quiz = {
     questions: Question[];
 }
 
+export type Score = {
+    id: number;
+    quizId: number;
+    userId: number;
+    score: number;
+}
+
 export type User = {
     id: number;
     username: string;
@@ -28,11 +35,4 @@ export type User = {
     created: Date;
     role: number;
     scores: Map<number, Score>;
-}
-
-export type Score = {
-    id: number;
-    quizId: number;
-    userId: number;
-    score: number;
 }

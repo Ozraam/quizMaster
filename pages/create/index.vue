@@ -1,69 +1,68 @@
 <script setup lang="ts">
-
 const quizTitle = ref('Untitled')
 const quizDescription = ref('')
-const questionsList : Ref<{getQuestions: () => {text: string, answers: {text: string, isCorrect: boolean}[]}[]} | null> = ref(null)
+const questionsList: Ref<{ getQuestions: () => { text: string, answers: { text: string, isCorrect: boolean }[] }[] } | null> = ref(null)
 
 useSeoMeta({
     title: quizTitle.value + ' | Create your quiz !',
-    description: 'Create your own quiz and share it with your friends',
+    description: 'Create your own quiz and share it with your friends'
 })
 
 async function addQuizToDatabase() {
-    const quizTitleTrim = quizTitle.value.trim();
-    if (quizTitleTrim == "") {
-        alert('Please enter a title for your quiz');
-        return;
+    const quizTitleTrim = quizTitle.value.trim()
+    if (quizTitleTrim === '') {
+        alert('Please enter a title for your quiz')
+        return
     }
 
-    const questions = questionsList.value!.getQuestions();
-    if (questions.length == 0) {
-        alert('Please add at least one question');
-        return;
+    const questions = questionsList.value!.getQuestions()
+    if (questions.length === 0) {
+        alert('Please add at least one question')
+        return
     }
 
     // description of the quiz
-    const description = quizDescription.value.trim();
-    if (description == "") {
-        alert('Please enter a description for your quiz');
-        return;
+    const description = quizDescription.value.trim()
+    if (description === '') {
+        alert('Please enter a description for your quiz')
+        return
     }
 
     const data = {
         title: quizTitleTrim,
-        description: description,
-        questions: questions
-    };
+        description,
+        questions
+    }
 
-    const goodQuestions = questions.map((question: {text: string, answers: {text: string, isCorrect: boolean}[]}) => {        
-        const questionText = question.text.trim();
-        if (questionText == "") {
-            alert('Please enter a question');
-            return false;
+    const goodQuestions = questions.map((question: { text: string, answers: { text: string, isCorrect: boolean }[] }) => {
+        const questionText = question.text.trim()
+        if (questionText === '') {
+            alert('Please enter a question')
+            return false
         }
 
-        const answers = question.answers;
+        const answers = question.answers
         if (answers.length < 2) {
-            alert('Please add at least two answers');
-            return false;
+            alert('Please add at least two answers')
+            return false
         }
 
-        const goodAnswers = Array.from(answers).map((answer:{text: string, isCorrect: boolean}) => {
-            const answerText = answer.text.trim();
-            if (answerText == "") {
-                alert('Please enter an answer');
-                return false;
+        const goodAnswers = Array.from(answers).map((answer: { text: string, isCorrect: boolean }) => {
+            const answerText = answer.text.trim()
+            if (answerText === '') {
+                alert('Please enter an answer')
+                return false
             }
-            return true;
-        });
+            return true
+        })
 
-        return true && goodAnswers.every((answer: boolean) => answer);
-    });
+        return true && goodAnswers.every((answer: boolean) => answer)
+    })
 
     if (!goodQuestions.every((question: boolean) => question)) {
-        return;
+        return
     }
-    
+
     const res = await useFetch('/api/quiz', {
         method: 'POST',
         headers: {
@@ -73,10 +72,10 @@ async function addQuizToDatabase() {
     })
 
     if (!res.error.value) {
-        const quiz = res.data.value;
-        await navigateTo('/quiz/' + quiz!.quizId);
+        const quiz = res.data.value
+        await navigateTo('/quiz/' + quiz!.quizId)
     } else {
-        alert('An error occured');
+        alert('An error occured')
     }
 }
 </script>
@@ -87,29 +86,29 @@ async function addQuizToDatabase() {
             Create your quiz !
         </h1>
 
-        <CreateQuizDetails 
-            @update:title="quizTitle = $event"
-            @update:description="quizDescription = $event"
+        <create-quiz-details
             :title="quizTitle"
             :description="quizDescription"
+            @update:title="quizTitle = $event"
+            @update:description="quizDescription = $event"
         />
 
         <h2>
             Questions
         </h2>
 
-        <CreateQuestionsList 
-            ref="questionsList"
-        />
+        <create-questions-list ref="questionsList" />
 
-        <button class="submit-button" @click="addQuizToDatabase">
+        <button
+            class="submit-button"
+            @click="addQuizToDatabase"
+        >
             Submit
         </button>
     </main>
 </template>
 
 <style scoped lang="scss">
-
 h2 {
     margin: 0;
     margin-top: 0.1em;

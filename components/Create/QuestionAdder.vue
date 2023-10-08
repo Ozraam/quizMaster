@@ -4,7 +4,11 @@ defineEmits(['click'])
 
 <template>
     <li class="question">
-        <button aria-label="Add question" class="add-question-button" @click="$emit('click')">
+        <button
+            aria-label="Add question"
+            class="add-question-button"
+            @click="$emit('click')"
+        >
             +
         </button>
     </li>
@@ -39,5 +43,4 @@ defineEmits(['click'])
     height: 100%;
     cursor: pointer;
 }
-
 </style>

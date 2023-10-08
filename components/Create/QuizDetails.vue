@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 const emit = defineEmits(['update:title', 'update:description'])
 
 const props = defineProps({
@@ -18,7 +16,7 @@ const title = ref(props.title)
 const description = ref(props.description)
 
 watch(title, (newTitle) => {
-    if(newTitle.length > 30) {
+    if (newTitle.length > 30) {
         newTitle = newTitle.slice(0, 30)
         title.value = newTitle
     }
@@ -26,23 +24,36 @@ watch(title, (newTitle) => {
 })
 
 watch(description, (newDescription) => {
-    
     emit('update:description', newDescription)
 })
-
 </script>
 
 <template>
     <div>
         <div class="form-group">
             <label for="quiz-title">Quiz title :</label>
-            <input type="text" name="quiz-title" id="quiz-title" placeholder="Untitled" v-model="title"
-                @input="e => $emit('update:title', title)">
+
+            <input
+                id="quiz-title"
+                v-model="title"
+                type="text"
+                name="quiz-title"
+                placeholder="Untitled"
+                @input="e => $emit('update:title', title)"
+            >
         </div>
+
         <div class="form-group">
             <label for="quiz-description">Quiz description :</label>
-            <textarea name="quiz-description" id="quiz-description" cols="30" rows="10" placeholder="Description"
-                v-model="description"></textarea>
+
+            <textarea
+                id="quiz-description"
+                v-model="description"
+                name="quiz-description"
+                cols="30"
+                rows="10"
+                placeholder="Description"
+            />
         </div>
     </div>
 </template>

@@ -7,19 +7,23 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxt/devtools": "latest",
     "bun-types": "latest",
+    "eslint": "^8.51.0",
     "nuxt": "^3.7.4",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "eslint-plugin-vue": "^9.15.1"
   },
   "dependencies": {
     "@types/better-sqlite3": "^7.6.5",
     "better-sqlite3": "^8.7.0",
-    "bindings": "^1.5.0",
     "prettier": "^3.0.3",
     "sass": "^1.69.0",
     "sass-loader": "^13.3.2",

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const textRef = ref('');
+const textRef = ref('')
 
 const props = defineProps<{
     answer: { text: string, isCorrect: boolean, id:number };
     questionIndex: number;
-}>();
+}>()
 
 const isCorrectRef = computed({
     get() {
@@ -17,11 +17,11 @@ const isCorrectRef = computed({
 const emit = defineEmits<{
     (event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
     (event: 'delete:answer'): void;
-}>();
+}>()
 
 watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     emit('update:answer', {
-        text: text,
+        text,
         isCorrect: newIsCorrect,
         id: props.answer.id
     })
@@ -32,14 +32,28 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     <li class="answer">
         <div class="answer-content">
             <div class="answer-correct">
-                <input type="radio" :name="'answer-correct' + questionIndex" class="answer-correct" :checked="isCorrectRef"
+                <input
+                    type="radio"
+                    :name="'answer-correct' + questionIndex"
+                    class="answer-correct"
+                    :checked="isCorrectRef"
                     @change="isCorrectRef = !isCorrectRef"
-                    
-                    />
+                >
             </div>
-            <input type="text" name="answer-text" class="answer-text" placeholder="Answer text"
-                v-model="textRef">
-            <button aria-label="Delete answer" class="delete-answer-button" @click="$emit('delete:answer')">
+
+            <input
+                v-model="textRef"
+                type="text"
+                name="answer-text"
+                class="answer-text"
+                placeholder="Answer text"
+            >
+
+            <button
+                aria-label="Delete answer"
+                class="delete-answer-button"
+                @click="$emit('delete:answer')"
+            >
                 X
             </button>
         </div>

@@ -1,4 +1,4 @@
-export default defineEventHandler((event) => {
-    const {dbManager} = useDatabase();
-    return dbManager.getQuizzes();
+export default defineEventHandler(() => {
+    const { dbManager } = useDatabase()
+    return dbManager.getQuizzes()
 })

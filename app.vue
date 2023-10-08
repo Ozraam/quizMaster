@@ -1,25 +1,47 @@
 <template>
-  <header>
-    <NuxtLink class="title" to="/">
-      QUIZ MASTER
-    </NuxtLink>
+    <div>
+        <header>
+            <nuxt-link
+                class="title"
+                to="/"
+            >
+                QUIZ MASTER
+            </nuxt-link>
 
-    <nav class="nav">
-      <ul>
-        <li>
-          <NuxtLink to="/" class="nav-link">Home</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/login" class="nav-link">Login</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/create" class="nav-link">Create</NuxtLink>
-        </li>
-      </ul>
-    </nav>
-  </header>
+            <nav class="nav">
+                <ul>
+                    <li>
+                        <nuxt-link
+                            to="/"
+                            class="nav-link"
+                        >
+                            Home
+                        </nuxt-link>
+                    </li>
 
-  <NuxtPage />
+                    <li>
+                        <nuxt-link
+                            to="/login"
+                            class="nav-link"
+                        >
+                            Login
+                        </nuxt-link>
+                    </li>
+
+                    <li>
+                        <nuxt-link
+                            to="/create"
+                            class="nav-link"
+                        >
+                            Create
+                        </nuxt-link>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <nuxt-page />
+    </div>
 </template>
 
 <style scoped lang="scss">

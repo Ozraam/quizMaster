@@ -1,7 +1,7 @@
-import { DBManager } from "./dbManager";
+import { DBManager } from './dbManager'
 
 export function useDatabase() {
-    const dbManager = DBManager.getInstance();
+    const dbManager = DBManager.getInstance()
     return {
         dbManager
     }

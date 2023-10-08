@@ -21,26 +21,40 @@ defineEmits(['update:question', 'update:answer', 'add-answer', 'delete:answer', 
             Question 1
         </h3>
 
-        <button class="delete-question-button" aria-label="Delete question" @click="$emit('delete:question')">
+        <button
+            class="delete-question-button"
+            aria-label="Delete question"
+            @click="$emit('delete:question')"
+        >
             X
         </button>
 
         <div class="question-content">
             <div class="question-text-container">
                 <label for="question-text">Question text :</label>
-                <input type="text" name="question-text" id="question-text" placeholder="Question text"
-                    class="question-text" v-model="questionRef"
-                    @input="e => $emit('update:question', {...question, text: questionRef})"
-                    >
+
+                <input
+                    id="question-text"
+                    v-model="questionRef"
+                    type="text"
+                    name="question-text"
+                    placeholder="Question text"
+                    class="question-text"
+                    @input="e => $emit('update:question', {
+                        ...question,
+                        text: questionRef
+                    })"
+                >
             </div>
         </div>
-        <CreateAnswerList 
-            :answers="question.answers" 
+
+        <create-answer-list
+            :answers="question.answers"
             :question-index="questionIndex"
             @update:answer="(answers, index) => $emit('update:answer', answers, index)"
             @add-answer="$emit('add-answer')"
             @delete:answer="index => $emit('delete:answer', index)"
-            />
+        />
     </li>
 </template>
 

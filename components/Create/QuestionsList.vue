@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 defineExpose({
     getQuestions: () => questions.value
 })
@@ -31,12 +30,12 @@ function updateAnswer(answer: { text: string, isCorrect: boolean }, index: numbe
             answer.isCorrect = false
         })
     }
-    
+
     questions.value[index].answers[indexAnswer] = answer
 }
 
 function deleteAnswer(index: number, indexAnswer: number) {
-    questions.value[index].answers.splice(indexAnswer, 1);
+    questions.value[index].answers.splice(indexAnswer, 1)
 }
 
 function deleteQuestion(index: number) {
@@ -46,13 +45,19 @@ function deleteQuestion(index: number) {
 
 <template>
     <ul class="question-list">
-        <CreateQuestion v-for="(question, index) in questions" :key="question.id" :question="question"
-            @update:question="questions[index] = $event" @add-answer="addAnswer(index)" :question-index="index"
-            @update:answer="(answer, indexAnswer) => updateAnswer(answer, index, indexAnswer)" 
+        <create-question
+            v-for="(question, index) in questions"
+            :key="question.id"
+            :question="question"
+            :question-index="index"
+            @update:question="questions[index] = $event"
+            @add-answer="addAnswer(index)"
+            @update:answer="(answer, indexAnswer) => updateAnswer(answer, index, indexAnswer)"
             @delete:answer="(indexAnswer) => deleteAnswer(index, indexAnswer)"
-            @delete:question="() => deleteQuestion(index)"  
-            />
-        <CreateQuestionAdder @click="addQuestion" />
+            @delete:question="() => deleteQuestion(index)"
+        />
+
+        <create-question-adder @click="addQuestion" />
     </ul>
 </template>
 
