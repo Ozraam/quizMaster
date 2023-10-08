@@ -1,3 +1,5 @@
+import { Quiz } from "~/utils/types";
+
 export default defineEventHandler(async (event) => {
     const {dbManager} = useDatabase();
     

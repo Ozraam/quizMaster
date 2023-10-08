@@ -1,19 +1,19 @@
 <template>
   <header>
-    <a class="title" href="/">
+    <NuxtLink class="title" to="/">
       QUIZ MASTER
-    </a>
+    </NuxtLink>
 
     <nav class="nav">
       <ul>
         <li>
-          <a href="/" class="nav-link">Home</a>
+          <NuxtLink to="/" class="nav-link">Home</NuxtLink>
         </li>
         <li>
-          <a href="/login" class="nav-link">Login</a>
+          <NuxtLink to="/login" class="nav-link">Login</NuxtLink>
         </li>
         <li>
-          <a href="/create" class="nav-link">Create</a>
+          <NuxtLink to="/create" class="nav-link">Create</NuxtLink>
         </li>
       </ul>
     </nav>
