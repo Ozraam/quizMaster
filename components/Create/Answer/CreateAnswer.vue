@@ -6,18 +6,18 @@ const props = defineProps<{
     questionIndex: number;
 }>()
 
+const isCorrectProps = ref(props.answer.isCorrect)
+
 const isCorrectRef = computed({
     get() {
         return props.answer.isCorrect
     },
     set(value) {
-        props.answer.isCorrect = value
+        isCorrectProps.value = value
     }
 })
-const emit = defineEmits<{
-    (event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
-    (event: 'delete:answer'): void;
-}>()
+const emit = defineEmits<{(event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
+    (event: 'delete:answer'): void;}>()
 
 watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     emit('update:answer', {

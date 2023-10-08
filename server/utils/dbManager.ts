@@ -24,15 +24,16 @@ export class DBManager {
     }
 
     getQuiz(quizId: string) {
-    // retrieve quiz from database and return as JSON
-    // database look like this:
-    // quiz -> id, title, description, created, modified
-    // question -> id, quiz_id, question
-    // answer -> id, question_id, answer, correct
+        // retrieve quiz from database and return as JSON
+        // database look like this:
+        // quiz -> id, title, description, created, modified
+        // question -> id, quiz_id, question
+        // answer -> id, question_id, answer, correct
 
-        const quiz : Quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        const quiz: Quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+
         if (!quiz) { return null }
-        const questions : Question[] = this.db.prepare('SELECT * FROM question WHERE quiz_id = ?').all(quizId) as Question[]
+        const questions: Question[] = this.db.prepare('SELECT * FROM question WHERE quiz_id = ?').all(quizId) as Question[]
         if (!questions) { return null }
         for (const question of questions) {
             const answers = this.db.prepare('SELECT * FROM answer WHERE question_id = ?').all(question.id) as Answer[]
@@ -47,8 +48,8 @@ export class DBManager {
     }
 
     getQuizzes() {
-        const quizzes : Quiz[] = []
-        const quizIds = this.db.prepare('SELECT id FROM quiz').all() as {id: string}[]
+        const quizzes: Quiz[] = []
+        const quizIds = this.db.prepare('SELECT id FROM quiz').all() as { id: string }[]
         for (const quizId of quizIds) {
             const quiz = this.getQuiz(quizId.id as string)
             if (quiz) { quizzes.push(quiz) }
@@ -91,7 +92,7 @@ export class DBManager {
     }
 
     updateScoreOfUser(quizId: number, user: User, score: number) {
-    // update score of user in database if score is higher than previous score
+        // update score of user in database if score is higher than previous score
         const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
 
         if (!quiz) { return new Response('Quiz Not Found', { status: 404 }) }
@@ -144,7 +145,7 @@ export class DBManager {
         return user
     }
 
-    updateUser(user: User) : boolean {
+    updateUser(user: User): boolean {
         const userInDB = this.db.prepare('SELECT * FROM users WHERE id = ?').get(user.id)
         if (!userInDB) { return false }
         this.db.prepare('UPDATE users SET username = ? WHERE id = ?')

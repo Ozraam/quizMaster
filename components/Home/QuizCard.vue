@@ -65,7 +65,7 @@ async function deleteQuiz() {
 
         <span class="quiz-card-button-container">
             <nuxt-link
-                :href="'/quiz?id=' + idQuiz"
+                :href="'/quiz/' + idQuiz"
                 class="quiz-card-button"
             >
                 Start

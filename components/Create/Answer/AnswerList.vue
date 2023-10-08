@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
     answers: { text: string, isCorrect: boolean, id: number }[];
     questionIndex: number;
 }>()
 
-defineEmits<{
-    (event: 'add-answer'): void;
+defineEmits<
+    {(event: 'add-answer'): void;
     (event: 'update:answer', answers: { text: string, isCorrect: boolean, id:number }, index: number): void;
     (event: 'delete:answer', index: number): void;
 }>()
