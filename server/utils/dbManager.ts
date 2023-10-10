@@ -37,9 +37,7 @@ export class DBManager {
         if (!questions) { return null }
         for (const question of questions) {
             const answers = this.db.prepare('SELECT * FROM answer WHERE question_id = ?').all(question.id) as Answer[]
-            answers.forEach((answer) => {
-                answer.correct = answer.correct === true
-            })
+
             question.answers = answers
         }
         quiz.questions = questions
@@ -80,10 +78,10 @@ export class DBManager {
                 )
             const questionId = this.db.prepare('SELECT * from question ORDER BY id DESC LIMIT 1').get() as Question
             for (const answer of question.answers) {
-                this.db.prepare('INSERT INTO answer (answer, question_id, correct) VALUES (?, ?, ?)')
+                this.db.prepare('INSERT INTO answer (answer, question_id, isCorrect) VALUES (?, ?, ?)')
                     .run(answer.text,
                         questionId.id,
-                        answer.correct
+                        answer.isCorrect ? 1 : 0
                     )
             }
         }

@@ -3,6 +3,11 @@ defineProps({
     answer: {
         type: Object,
         required: true
+    },
+    isSelected: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 
@@ -11,12 +16,13 @@ defineEmits<{(event: 'select-answer', answer: Answer): void}>()
 
 <template>
     <li>
-        <button class="answer">
+        <div class="answer">
             <input
                 :id="'answer' + answer.id"
                 type="radio"
                 name="question-answer"
                 class="answer-radio hidden"
+                :checked="isSelected"
                 @click="$emit('select-answer', answer)"
             >
 
@@ -26,11 +32,11 @@ defineEmits<{(event: 'select-answer', answer: Answer): void}>()
             >
                 {{ answer.answer }}
             </label>
-        </button>
+        </div>
     </li>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 li {
     list-style: none;
     margin: 10px 0;
@@ -46,6 +52,10 @@ li {
     flex-direction: column;
     align-items: center;
     font-size: large;
+
+    &-text {
+        padding: 10px;
+    }
 }
 
 .answer:hover {

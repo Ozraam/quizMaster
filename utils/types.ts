@@ -2,7 +2,7 @@ export type Answer = {
     id: number;
     text: string;
     question_id: number;
-    correct: boolean;
+    isCorrect: boolean;
 }
 
 export type Question = {

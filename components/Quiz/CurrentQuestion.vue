@@ -7,10 +7,24 @@ const props = defineProps({
     questionIndex: {
         type: Number,
         required: true
+    },
+    answerSelected: {
+        type: Object,
+        required: false,
+        default: undefined
     }
 })
 
-const currentAnswer = ref(props.question.answers[0])
+const emit = defineEmits(['answer-selected'])
+
+const currentAnswer = computed({
+    get() {
+        return props.answerSelected
+    },
+    set(answer) {
+        emit('answer-selected', answer)
+    }
+})
 
 defineExpose({
     currentAnswer
@@ -32,6 +46,7 @@ defineExpose({
                 v-for="(answer, index) in question.answers"
                 :key="index"
                 :answer="answer"
+                :is-selected="currentAnswer === answer"
                 @select-answer="currentAnswer = answer"
             />
         </ul>
