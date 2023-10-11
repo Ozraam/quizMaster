@@ -20,6 +20,7 @@ const score = computed(() => {
     }, 0)
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function saveScore() {
     useFetch('/api/saveScore', {
         method: 'POST',

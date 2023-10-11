@@ -4,7 +4,7 @@ export default defineEventHandler((event) => {
     const quizId = getQuery(event).quizId as string | undefined
 
     if (quizId === undefined) {
-        createError({
+        throw createError({
             statusCode: 400,
             message: 'Invalid quiz ID'
         })
@@ -13,7 +13,7 @@ export default defineEventHandler((event) => {
     const quiz = dbManager.getQuiz(quizId!)
 
     if (quiz === undefined) {
-        createError({
+        throw createError({
             statusCode: 404,
             message: 'Quiz not found'
         })
