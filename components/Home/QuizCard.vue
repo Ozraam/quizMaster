@@ -26,7 +26,7 @@ const props = defineProps({
 })
 
 async function deleteQuiz() {
-    if (!user.value || !confirm('Are you sure you want to delete this quiz?')) {
+    if (!user.value || !user.value.isAdmin || !confirm('Are you sure you want to delete this quiz?')) {
         return
     }
 
@@ -76,7 +76,7 @@ async function deleteQuiz() {
             </nuxt-link>
 
             <button
-                v-if="user"
+                v-if="user && user.isAdmin"
                 class="quiz-card-button quiz-card-button-delete"
                 @click="deleteQuiz"
             >

@@ -102,7 +102,6 @@ export class DBManager {
 
         // check if score is higher than previous score
         const scoreInDB = this.db.prepare('SELECT * FROM score WHERE quizId = ? AND userId = ?').get(quizId, user.id) as Score
-        
 
         if (scoreInDB !== undefined) {
             if (scoreInDB.score < score) {

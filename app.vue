@@ -27,7 +27,7 @@ useFetchUser()
                     <li>
                         <nuxt-link
                             v-if="!user"
-                            to="/login"
+                            to="/user/login"
                             class="nav-link"
                         >
                             Login

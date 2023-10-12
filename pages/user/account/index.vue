@@ -1,7 +1,7 @@
 <script setup>
 const user = useUser()
 if (!user.value) {
-    navigateTo('/login')
+    navigateTo('/user/login')
 }
 
 function logout() {
@@ -29,6 +29,13 @@ function logout() {
         >
             Logout
         </button>
+
+        <nuxt-link
+            to="/admin"
+            class="btn btn-admin"
+        >
+            Admin Panel
+        </nuxt-link>
     </main>
 </template>
 
@@ -50,9 +57,16 @@ function logout() {
     cursor: pointer;
     transition: border-color 0.3s ease-in-out;
     width: fit-content;
+
+    &-admin {
+        color: black;
+        text-decoration: none;
+    }
 }
 
 .btn:hover {
     border-color: black;
+    border-width: 2px;
+    padding: 9px;
 }
 </style>

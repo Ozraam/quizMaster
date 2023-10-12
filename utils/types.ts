@@ -34,5 +34,7 @@ export type User = {
     password: string;
     created: Date;
     role: number;
+    isAdmin: boolean;
+    isSuperAdmin: boolean;
     scores: { [quizId: number]: number };
 }

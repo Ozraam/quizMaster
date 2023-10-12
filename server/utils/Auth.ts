@@ -89,24 +89,21 @@ export class Auth {
             user.scores[score.quizId] = score.score
         })
 
+        user.isAdmin = !!(user.role & Role.admin)
+        user.isSuperAdmin = !!(user.role & Role.superadmin)
+
         return user
     }
 
-    logout(token: string) {
+    static clearUsers() {
         const db = DBManager.getInstance().getDB()
-        db.prepare(`
-        DELETE FROM sessions WHERE token = $token
-        `).run({ $token: token })
-    }
-
-    clearUsers() {
-        const db = DBManager.getInstance().getDB()
-        db.prepare(`
-            DELETE FROM users
-        `).run()
 
         db.prepare(`
-            DELETE FROM sessions
-        `).run()
+            DELETE FROM score WHERE userId NOT IN (SELECT id FROM users WHERE role & ? = 0)
+        `).run(Role.superadmin)
+
+        db.prepare(`
+            DELETE FROM users WHERE role & ? = 0
+        `).run(Role.superadmin)
     }
 }
