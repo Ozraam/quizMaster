@@ -35,7 +35,7 @@ useFetchUser()
 
                         <nuxt-link
                             v-else
-                            to="/account"
+                            to="/user/account"
                             class="nav-link"
                         >
                             Account

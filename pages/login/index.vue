@@ -80,7 +80,7 @@ function infoMessage(text, error = false) {
     </main>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .input-group {
     display: flex;
     flex-direction: column;

@@ -8,6 +8,12 @@ export function useUser() {
     return user
 }
 
+export async function useResetSession() {
+    const { reset } = await useSession()
+    reset()
+    user.value = null
+}
+
 export async function setToken(token: string) {
     const { update } = await useSession()
     update({ token })
