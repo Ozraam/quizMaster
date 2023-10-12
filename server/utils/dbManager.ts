@@ -124,15 +124,14 @@ export class DBManager {
         this.db.exec('DELETE FROM quiz')
         this.db.exec('DELETE FROM question')
         this.db.exec('DELETE FROM answer')
-        return new Response('', { status: 204 })
     }
 
     clearQuiz(quizId: number) {
-        if (!quizId) { return new Response('No quizId given', { status: 400 }) }
+        if (!quizId) { return false }
         this.db.prepare('DELETE FROM quiz WHERE id = ?').run(quizId)
         this.db.prepare('DELETE FROM question WHERE quiz_id = ?').run(quizId)
         this.db.prepare('DELETE FROM answer WHERE question_id = ?').run(quizId)
-        return new Response('', { status: 204 })
+        return true
     }
 
     getAllUsers() {
