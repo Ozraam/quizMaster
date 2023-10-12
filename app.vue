@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const user = useUser()
+useFetchUser()
 </script>
 
 <template>

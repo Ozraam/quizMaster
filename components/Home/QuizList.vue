@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { data } = useFetch('/api/getQuizzes')
 const quizList = data
+const user = useUser()
 </script>
 
 <template>
@@ -15,8 +16,8 @@ const quizList = data
             :title="quiz.title"
             :description="quiz.description"
             :id-quiz="quiz.id"
-            :score="0"
-            :max-score="0"
+            :score="user?.scores[quiz.id]"
+            :max-score="quiz.questions.length"
         />
     </div>
 </template>

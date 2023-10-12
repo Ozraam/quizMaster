@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const user = useUser()
+
 const props = defineProps({
     description: {
         type: String,
@@ -10,7 +12,8 @@ const props = defineProps({
     },
     score: {
         type: Number,
-        required: true
+        required: false,
+        default: undefined
     },
     maxScore: {
         type: Number,
@@ -23,7 +26,7 @@ const props = defineProps({
 })
 
 async function deleteQuiz() {
-    if (/* TODO !user || */ !confirm('Are you sure you want to delete this quiz?')) {
+    if (!user.value || !confirm('Are you sure you want to delete this quiz?')) {
         return
     }
 
@@ -31,7 +34,7 @@ async function deleteQuiz() {
         '/api/ADMIN/deleteQuiz?id=' + props.idQuiz,
         {
             headers: {
-                Authorization: 'Bearer ' /* TODO + user.token */,
+                Authorization: 'Bearer ' + user.value.token,
             }
         }
     )
@@ -53,6 +56,7 @@ async function deleteQuiz() {
                 </h3>
 
                 <home-player-score
+                    v-if="score !== undefined"
                     :score="score"
                     :max-score="maxScore"
                 />
@@ -72,6 +76,7 @@ async function deleteQuiz() {
             </nuxt-link>
 
             <button
+                v-if="user"
                 class="quiz-card-button quiz-card-button-delete"
                 @click="deleteQuiz"
             >

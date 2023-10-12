@@ -93,12 +93,18 @@ export class DBManager {
         // update score of user in database if score is higher than previous score
         const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
 
-        if (!quiz) { return new Response('Quiz Not Found', { status: 404 }) }
+        if (!quiz) {
+            return {
+                statusCode: 404,
+                message: 'Quiz not found'
+            }
+        }
 
         // check if score is higher than previous score
         const scoreInDB = this.db.prepare('SELECT * FROM score WHERE quizId = ? AND userId = ?').get(quizId, user.id) as Score
+        
 
-        if (scoreInDB) {
+        if (scoreInDB !== undefined) {
             if (scoreInDB.score < score) {
                 this.db.prepare('UPDATE score SET score = ? WHERE id = ?').run(score, scoreInDB.id)
             }

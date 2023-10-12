@@ -34,5 +34,5 @@ export type User = {
     password: string;
     created: Date;
     role: number;
-    scores: Map<number, Score>;
+    scores: { [quizId: number]: number };
 }

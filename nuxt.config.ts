@@ -15,6 +15,7 @@ export default defineNuxtConfig({
 
     modules: [
         '@nuxtjs/eslint-module',
+        '@sidebase/nuxt-session'
     ],
     eslint: {
         fix: true,

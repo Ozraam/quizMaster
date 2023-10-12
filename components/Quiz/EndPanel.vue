@@ -20,24 +20,27 @@ const score = computed(() => {
     }, 0)
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function saveScore() {
+    const user = useUser()
+    if (!user.value) {
+        return
+    }
     useFetch('/api/saveScore', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            Authorization: 'Bearer ' + user.value.token,
         },
         body: JSON.stringify({
             quizId: props.quizId,
             score: score.value,
         }),
     })
+    useFetchUser()
 }
 
 onMounted(() => {
-    // TODO: remove comment when user is implemented
-    // saveScore()
+    saveScore()
 })
 </script>
 

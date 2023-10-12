@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import * as jose from 'jose'
-import { User } from '~/utils/types'
+import { Score, User } from '~/utils/types'
 
 export enum LoginError {
     UserNotFound,
@@ -49,14 +49,13 @@ export class Auth {
         return token
     }
 
-    // TODO : Use JWT instead of random string with jose
     static async generateSessionToken(user: User): Promise<string> {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
 
         const jwt = await new jose.SignJWT({ user })
             .setProtectedHeader({ alg: process.env.JWT_ALGORITHM! })
             .setIssuedAt()
-            .setExpirationTime('1h')
+            .setExpirationTime('5h')
             .sign(secret)
 
         return jwt
@@ -75,6 +74,21 @@ export class Auth {
 
     static async getUser(token: string): Promise<User | null> {
         const user = await Auth.isSessionValid(token)
+        if (!user) {
+            return null
+        }
+        // get scores of user
+        user.scores = {}
+
+        const db = DBManager.getInstance().getDB()
+        const scores = db.prepare(`
+            SELECT * FROM score WHERE userId = ?
+        `).all(user.id) as Score[]
+
+        scores.forEach((score) => {
+            user.scores[score.quizId] = score.score
+        })
+
         return user
     }
 
