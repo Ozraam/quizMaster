@@ -49,6 +49,7 @@ async function signUp() {
                 class="input"
                 placeholder=" "
                 autocomplete="off"
+                required
             >
         </div>
 
@@ -66,6 +67,7 @@ async function signUp() {
                 class="input"
                 placeholder=" "
                 autocomplete="off"
+                required
             >
         </div>
 

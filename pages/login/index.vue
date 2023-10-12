@@ -2,14 +2,6 @@
 const containerRef = ref(null)
 const loginRef = ref(null)
 const signupRef = ref(null)
-const { session } = await useSession()
-
-watch(session, () => {
-    if (session.value && session.value.user) {
-        router.push('/')
-    }
-})
-
 const information = ref({
     error: false,
     text: '',
@@ -36,6 +28,10 @@ function switchForm() {
     })
 }
 
+function loginDone() {
+    navigateTo('/')
+}
+
 function infoMessage(text, error = false) {
     information.value = { text, error }
 }
@@ -49,6 +45,8 @@ function infoMessage(text, error = false) {
         >
             <login-login
                 ref="loginRef"
+                @login="loginDone"
+                @info-message="infoMessage"
             />
 
             <login-signup

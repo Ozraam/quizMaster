@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const user = useUser()
+</script>
+
 <template>
     <div>
         <header>
@@ -21,10 +25,19 @@
 
                     <li>
                         <nuxt-link
+                            v-if="!user"
                             to="/login"
                             class="nav-link"
                         >
                             Login
+                        </nuxt-link>
+
+                        <nuxt-link
+                            v-else
+                            to="/account"
+                            class="nav-link"
+                        >
+                            Account
                         </nuxt-link>
                     </li>
 

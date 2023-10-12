@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt'
+import * as jose from 'jose'
 import { User } from '~/utils/types'
 
 export enum LoginError {
@@ -14,7 +15,6 @@ export class Auth {
         const user = db.prepare(`
             SELECT * FROM users WHERE username = ?
         `).get(username) as { username: string }
-        
 
         if (user) { return false }
 
@@ -30,61 +30,51 @@ export class Auth {
         return true
     }
 
-    async login(username: string, password: string): Promise<string | LoginError> {
+    static async login(username: string, password: string): Promise<string | LoginError> {
         const db = DBManager.getInstance().getDB()
         username = username.toLowerCase()
+
         const user = await db.prepare(`
             SELECT * FROM users WHERE username = ?
-        `).get(username) as { usename: string, password: string, id: number }
+        `).get(username) as User
+
         if (!user) { return LoginError.UserNotFound }
-        if (!await Bun.password.verify(password, user.password)) {
-            return LoginError.PasswordIncorrect
-        }
-        const expires30days = new Date()
-        expires30days.setDate(expires30days.getDate() + 30)
-        const token = this.generateSessionToken()
-        db.prepare(`
-            INSERT INTO sessions (token, user_id, expires)
-            VALUES (?, ?, ?)
-        `).run(token, user.id.toString(), expires30days.toISOString())
+
+        const match = await bcrypt.compare(password, user.password)
+
+        if (!match) { return LoginError.PasswordIncorrect }
+
+        const token = await Auth.generateSessionToken(user)
+
         return token
     }
 
-    // TODO : Use JWT instead of random string
-    generateSessionToken(): string {
-        const db = DBManager.getInstance().getDB()
-        const randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        // check if token already exists
-        const token = db.prepare(`
-            SELECT * FROM sessions WHERE token = $token
-        `).get({ $token: randomString }) as { token: string }
-        if (token) {
-            return this.generateSessionToken()
-        }
-        return randomString
+    // TODO : Use JWT instead of random string with jose
+    static async generateSessionToken(user: User): Promise<string> {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
+
+        const jwt = await new jose.SignJWT({ user })
+            .setProtectedHeader({ alg: process.env.JWT_ALGORITHM! })
+            .setIssuedAt()
+            .setExpirationTime('1h')
+            .sign(secret)
+
+        return jwt
     }
 
-    isSessionValid(token: string): boolean {
-        const db = DBManager.getInstance().getDB()
-        const session = db.prepare(`
-            SELECT * FROM sessions WHERE token = $token
-        `).get({ $token: token }) as { token: string, expires: Date }
-        if (!session) { return false }
-        if (new Date(session.expires) < new Date()) {
-            return false
+    static async isSessionValid(token: string): Promise<User | null> {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
+
+        try {
+            const { payload } = await jose.jwtVerify(token, secret)
+            return payload.user as User
+        } catch (e) {
+            return null
         }
-        return true
     }
 
-    getUser(token: string): User | null {
-        const db = DBManager.getInstance().getDB()
-        const user = db.prepare(`
-            SELECT users.username, users.id, created, role FROM users
-            INNER JOIN sessions ON sessions.user_id = users.id
-            WHERE sessions.token = $token
-        `).get({ $token: token }) as User
-
-        if (!user) { return null }
+    static async getUser(token: string): Promise<User | null> {
+        const user = await Auth.isSessionValid(token)
         return user
     }
 
