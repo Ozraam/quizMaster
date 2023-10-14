@@ -2,9 +2,9 @@
 const user = useUser()
 const info = ref('')
 
-if (!user.value || !user.value.isAdmin) {
-    navigateTo('/')
-}
+definePageMeta({
+    middleware: ['admin']
+})
 
 async function clearUser() {
     if (!confirm('Are you sure you want to clear all users?')) {

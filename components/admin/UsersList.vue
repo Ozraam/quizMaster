@@ -1,5 +1,15 @@
 <script setup lang="ts">
-const users = (await useFetch('/api/ADMIN/getUsers')).data
+const loggedUser = useUser()
+const users = (
+    await useFetch('/api/ADMIN/getUsers', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${loggedUser.value.token}`,
+        }
+
+    })
+).data
 </script>
 
 <template>

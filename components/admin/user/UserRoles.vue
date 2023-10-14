@@ -5,9 +5,18 @@ const props = defineProps({
         required: true
     }
 })
-
-const roles = (await useFetch('/api/ADMIN/getRoles')).data as Ref<{id: number, name: string, value: number}[] | null>
 const loggedUser = useUser()
+
+const roles = (
+    await useFetch('/api/ADMIN/getRoles', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${loggedUser.value.token}`,
+        }
+    }
+    )
+).data as Ref<{ id: number, name: string, value: number }[] | null>
 
 const emit = defineEmits(['infoUpdated', 'infoUpdateError'])
 
@@ -16,9 +25,9 @@ function updateRoles() {
         return
     }
 
-    const newRoles = rolesSelect.value?.map((role : HTMLInputElement) => {
-        return roles.value?.find((r:any) => r.name === role.value && role.checked)
-    }).reduce((acc:number, role:any) => {
+    const newRoles = rolesSelect.value?.map((role: HTMLInputElement) => {
+        return roles.value?.find((r: any) => r.name === role.value && role.checked)
+    }).reduce((acc: number, role: any) => {
         return acc | role?.value
     }, 0)
 
@@ -72,9 +81,7 @@ const rolesSelect = ref([])
             </ul>
         </div>
 
-        <button
-            class="save-role"
-        >
+        <button class="save-role">
             Save role
         </button>
     </form>

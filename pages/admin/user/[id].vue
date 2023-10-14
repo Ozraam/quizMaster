@@ -1,17 +1,23 @@
 <script setup lang="ts">
+definePageMeta({
+    middleware: ['admin']
+})
+
 const route = useRoute()
 
 const userId = route.params.id as string
+const loggedUser = useUser()
 
 const user = (await useFetch('/api/ADMIN/getUser', {
     query: {
         userId
+    },
+    headers: {
+        Authorization: `Bearer ${loggedUser.value.token}`,
     }
 })).data as User
 
 const info = ref('')
-
-const loggedUser = useUser()
 
 function deleteUser() {
     if (!loggedUser.value || !user || !confirm('Are you sure?')) {
