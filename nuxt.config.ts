@@ -10,13 +10,18 @@ export default defineNuxtConfig({
 
     css: [
         '~/assets/scss/global.scss',
-        '~/assets/fonts/fonts.css'
+        '~/assets/fonts/fonts.css',
+        '~/assets/scss/colors.scss',
     ],
 
     modules: [
         '@nuxtjs/eslint-module',
-        '@sidebase/nuxt-session'
+        '@sidebase/nuxt-session',
+        '@nuxtjs/style-resources',
     ],
+    styleResources: {
+        scss: ['./assets/scss/*.scss']
+    },
     eslint: {
         fix: true,
     }

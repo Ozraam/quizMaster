@@ -180,4 +180,9 @@ export class DBManager {
         const roles = this.db.prepare('SELECT * FROM roles').all()
         return roles
     }
+
+    isQuizExist(quizId: string) {
+        const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        return quiz !== undefined
+    }
 }

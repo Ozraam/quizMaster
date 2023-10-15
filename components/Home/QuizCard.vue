@@ -45,6 +45,23 @@ async function deleteQuiz() {
         alert('Failed to delete quiz')
     }
 }
+
+async function createRoom() {
+    const { error, data } = await useFetch('/api/RealTimeGame/createRoom', {
+        query: { quizId: props.idQuiz },
+        headers: {
+            Authorization: 'Bearer ' + user.value.token,
+        }
+    })
+
+    if (error.value) {
+        alert('Failed to create room')
+    } else {
+        navigateTo('/room/' + data.value?.roomId)
+    }
+}
+
+const temp = ref(0)
 </script>
 
 <template>
@@ -76,12 +93,28 @@ async function deleteQuiz() {
             </nuxt-link>
 
             <button
+                v-if="user"
+                @click="createRoom"
+            >
+                Create Room
+            </button>
+
+            <button
                 v-if="user && user.isAdmin"
                 class="quiz-card-button quiz-card-button-delete"
                 @click="deleteQuiz"
             >
                 Delete
             </button>
+
+            <input
+                v-model="temp"
+                type="text"
+            >
+
+            <nuxt-link :to="'/room/' + temp">
+                joinROOM
+            </nuxt-link>
         </span>
     </div>
 </template>
