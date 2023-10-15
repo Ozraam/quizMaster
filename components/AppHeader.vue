@@ -12,7 +12,7 @@ useFetchUser()
             QUIZ MASTER
         </nuxt-link>
 
-        <nav class="nav">
+        <nav class="header-nav">
             <ul>
                 <li>
                     <nuxt-link
@@ -56,6 +56,41 @@ useFetchUser()
 
 <style scoped lang="scss">
 header {
-    background-color: $primary;
+    background-color: rgba($primary, 0.4);
+    color: $primary;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: $text-size;
+
+    a {
+        color: $primary;
+        text-decoration: none;
+    }
+
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: center;
+
+    ul {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            margin: 0 10px;
+        }
+    }
 }
 </style>
