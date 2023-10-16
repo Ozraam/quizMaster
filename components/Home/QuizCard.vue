@@ -60,8 +60,6 @@ async function createRoom() {
         navigateTo('/room/' + data.value?.roomId)
     }
 }
-
-const temp = ref(0)
 </script>
 
 <template>
@@ -85,36 +83,11 @@ const temp = ref(0)
         </span>
 
         <span class="quiz-card-button-container">
-            <nuxt-link
-                :href="'/quiz/' + idQuiz"
+            <button
                 class="quiz-card-button"
             >
-                Start
-            </nuxt-link>
-
-            <button
-                v-if="user"
-                @click="createRoom"
-            >
-                Create Room
+                More
             </button>
-
-            <button
-                v-if="user && user.isAdmin"
-                class="quiz-card-button quiz-card-button-delete"
-                @click="deleteQuiz"
-            >
-                Delete
-            </button>
-
-            <input
-                v-model="temp"
-                type="text"
-            >
-
-            <nuxt-link :to="'/room/' + temp">
-                joinROOM
-            </nuxt-link>
         </span>
     </div>
 </template>
@@ -123,8 +96,7 @@ const temp = ref(0)
 .quiz-card {
     position: relative;
     width: 100%;
-    max-width: 250px;
-    margin: 0 auto;
+    max-width: 200px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -133,6 +105,11 @@ const temp = ref(0)
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: $secondary;
+
+    &-description {
+        margin-bottom: 5px;
+    }
 }
 
 .quiz-card-title {
@@ -142,52 +119,24 @@ const temp = ref(0)
 }
 
 .quiz-card-button {
-    max-width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid $secondary;
+    background-color: $tertiary;
+    border-radius: 500px;
     cursor: pointer;
     text-decoration: none;
-    color: black;
-}
+    color: $primary;
+    text-transform: uppercase;
 
-.quiz-card-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.quiz-card-button:hover {
-    background-color: #ccc;
-}
-
-.hide {
-    display: none;
+    &:hover {
+        filter: brightness(1.2);
+    }
 }
 
 .quiz-card-title-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-}
-
-.quiz-card-button-delete {
-    margin-top: 10px;
-    background-color: #f00;
-    color: #fff;
-    border: 1px solid #f00;
-    font-size: 1.05rem;
-    font-weight: bold;
-}
-
-.quiz-card-button-delete:hover {
-    background-color: #fff;
-    color: #f00;
-}
-
-.quiz-card-button-delete:active {
-    background-color: #f00;
-    color: #fff;
 }
 </style>
