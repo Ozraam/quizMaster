@@ -2,7 +2,7 @@
 const username = ref('')
 const password = ref('')
 
-const emit = defineEmits(['login', 'info-message'])
+const emit = defineEmits(['login', 'info-message', 'switch-form'])
 
 const user = useUser()
 
@@ -52,8 +52,8 @@ async function login() {
                 v-model="username"
                 type="text"
                 name="username"
-                class="input"
-                placeholder=" "
+                class="input-input"
+                placeholder="Username"
                 autocomplete="off"
                 required
             >
@@ -70,8 +70,8 @@ async function login() {
                 v-model="password"
                 type="password"
                 name="password"
-                class="input"
-                placeholder=" "
+                class="input-input"
+                placeholder="Password"
                 required
             >
         </div>
@@ -83,5 +83,59 @@ async function login() {
                 Login
             </button>
         </div>
+
+        <div class="small">
+            Don't have an account?
+            <a
+                href="#"
+                @click.prevent="$emit('switch-form')"
+            >
+                Sign up !
+            </a>
+        </div>
     </form>
 </template>
+
+<style scoped lang="scss">
+.small {
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+.input-group {
+    margin-top: 20px;
+
+    .input-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid $primary;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s ease-in-out;
+        border: 1px solid rgba($color: $secondary, $alpha: 0.4);
+
+        &:focus {
+            border-color: $secondary;
+        }
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid $primary;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s ease-in-out;
+        border: 1px solid rgba($color: $secondary, $alpha: 0.4);
+        background-color: $primary;
+        color: $secondary;
+        cursor: pointer;
+
+        &:hover {
+            filter: brightness(1.2);
+        }
+    }
+}
+</style>

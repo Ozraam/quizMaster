@@ -7,24 +7,44 @@ const information = ref({
     text: '',
 })
 
+const cacheLogin = ref(false)
+const cacheRef = ref(null)
+
 function switchForm() {
-    containerRef.value.animate([
-        { filter: 'blur(0px)' },
-        { filter: 'blur(15px)' },
-    ], {
-        duration: 250,
-        forwards: true,
-    }).addEventListener('finish', () => {
-        loginRef.value.$el.classList.toggle('hide')
-        signupRef.value.$el.classList.toggle('hide')
-        containerRef.value.animate([
-            { filter: 'blur(15px)' },
-            { filter: 'blur(0px)' },
-        ],
-        {
-            duration: 250,
-            forwards: true,
-        })
+    cacheLogin.value = !cacheLogin.value
+    /*
+    @keyframes switch {
+        from {
+            left: 50%;
+            right: 0;
+        }
+
+        50% {
+            left: 0;
+            right: 0;
+        }
+
+        to {
+            left: 0;
+            right: 50%;
+        }
+    }
+    */
+
+    const keyframes = [
+        { left: '50%', right: 0 },
+        { left: 0, right: 0 },
+        { left: 0, right: '50%' },
+    ]
+
+    if (!cacheLogin.value) {
+        keyframes.reverse()
+    }
+
+    cacheRef.value.animate(keyframes, {
+        duration: 1000,
+        easing: 'ease-in-out',
+        fill: 'forwards',
     })
 }
 
@@ -38,7 +58,7 @@ function infoMessage(text, error = false) {
 </script>
 
 <template>
-    <main>
+    <main class="center">
         <div
             ref="containerRef"
             class="container"
@@ -47,126 +67,59 @@ function infoMessage(text, error = false) {
                 ref="loginRef"
                 @login="loginDone"
                 @info-message="infoMessage"
+                @switch-form="switchForm"
             />
 
             <login-signup
                 ref="signupRef"
-                class="hide"
                 @signup="switchForm"
                 @info-message="infoMessage"
+                @switch-form="switchForm"
             />
 
-            <div class="switch">
-                <span class="switch-text">Don't have an account?</span>
-
-                <button
-                    class="switch-btn"
-                    @click="switchForm"
-                >
-                    Sign Up
-                </button>
-
-                <span class="switch-text hide">Already have an account?</span>
-
-                <button class="switch-btn hide">
-                    Login
-                </button>
+            <div
+                ref="cacheRef"
+                class="cache"
+                :class="{ 'cache-login': cacheLogin }"
+            >
+                <!--  -->
             </div>
-
-            <p :class="{ error: information.error }">
-                {{ information.text }}
-            </p>
         </div>
     </main>
 </template>
 
 <style scoped lang="scss">
-.input-group {
+.center {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
 }
-
 .container {
     max-width: 400px;
     position: relative;
+    background-color: $primary;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    border: 1px solid $secondary;
+    gap: 20px;
 }
 
-.input {
-    background-color: transparent;
-    border: none;
-    border-bottom: 1px solid black;
-    padding: 12px 15px;
-    margin: 8px 0;
-    width: 100%;
-}
-
-.input:focus {
-    outline: none;
-}
-
-.input-before {
-    position: relative;
-}
-
-.input-before::before {
+.cache {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all 0.2s ease-in-out;
-    pointer-events: none;
-}
-
-.input-before:focus-within::before {
     top: 0;
-    transform: translateY(0);
-}
-/* TODO : :has variant for firefox */
-.input-before:has(> .input:not(:placeholder-shown)):before {
-    top: 0;
-    transform: translateY(0);
-}
+    left: 50%;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to right bottom, $tertiary, $secondary);
+    border: 2px $secondary solid;
+    border-radius: 0 5px 5px 0;
+    transition: border-radius 0.5s ease-in-out;
 
-.username::before {
-    content: "Username";
-}
-
-.password::before {
-    content: "Password";
-}
-
-.hide {
-    display: none;
-}
-
-.btn {
-    background-color: transparent;
-    border: 1px solid black;
-    color: black;
-    padding: 12px 15px;
-    margin: 8px 0;
-    width: 100%;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: all 0.1s ease-in-out;
-}
-
-.btn:hover {
-    background-color: black;
-    color: white;
-    font-weight: bold;
-}
-
-.switch-btn {
-    background-color: transparent;
-    text-decoration: underline;
-    border: none;
-    cursor: pointer;
-}
-
-.switch-btn:hover {
-    text-decoration: blue underline;
-    color: blue;
+    &.cache-login {
+        border-radius: 5px 0 0 5px;
+    }
 }
 
 .error {

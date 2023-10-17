@@ -32,13 +32,13 @@ defineExpose({
 </script>
 
 <template>
-    <h2 class="subtitle">
-        Question {{ questionIndex + 1 }}
-    </h2>
-
     <div class="question">
-        <p class="question-text">
+        <h2 class="question-text">
             {{ question.question }}
+        </h2>
+
+        <p class="prompt-text">
+            Choose the correct answer:
         </p>
 
         <ul class="answer-container">
@@ -64,5 +64,17 @@ ul {
 
 .question-text {
     text-align: center;
+    font-weight: 400;
+    text-transform: capitalize;
+    margin-bottom: 2em;
+}
+
+.answer-container {
+    display: flex;
+    gap: 10px;
+}
+
+.prompt-text {
+    margin-bottom: 20px;
 }
 </style>

@@ -11,14 +11,24 @@ defineProps({
     }
 })
 
+function focusAnswer() {
+    answerRef.value?.click()
+}
+
+const answerRef : Ref<null | HTMLInputElement> = ref(null)
+
 defineEmits<{(event: 'select-answer', answer: Answer): void}>()
 </script>
 
 <template>
     <li>
-        <div class="answer">
+        <button
+            class="answer"
+            @click="focusAnswer"
+        >
             <input
                 :id="'answer' + answer.id"
+                ref="answerRef"
                 type="radio"
                 name="question-answer"
                 class="answer-radio hidden"
@@ -32,53 +42,45 @@ defineEmits<{(event: 'select-answer', answer: Answer): void}>()
             >
                 {{ answer.answer }}
             </label>
-        </div>
+        </button>
     </li>
 </template>
 
 <style scoped lang="scss">
 li {
     list-style: none;
-    margin: 10px 0;
+    margin: 0;
     cursor: pointer;
+    width: 100%;
 }
 
 .answer {
     width: 100%;
+    text-align: center;
     padding: 10px;
-    border: none;
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: large;
+    background-color: $secondary;
+    color: $primary;
+    border-radius: 1000px;
+    cursor: pointer;
+    border: 2px solid $tertiary;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        filter: brightness(1.5);
+    }
 
     &-text {
-        padding: 10px;
+        width: 100%;
+        height: 100%;
     }
-}
 
-.answer:hover {
-    cursor: pointer;
-}
+    &-text {
+        cursor: pointer;
+    }
 
-.answer-text {
-    position: relative;
-    cursor: pointer;
-}
-
-.answer-text::after {
-    content: '';
-    position: absolute;
-    border-bottom: 2px solid black;
-    width: 0;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    transition: width 0.2s ease-in-out;
-}
-
-.answer:hover .answer-text::after, .answer.active .answer-text::after, .answer-radio:checked + .answer-text::after {
-    width: 100%;
+    &:has(input:checked) {
+        background-color: $tertiary;
+        border-color: $secondary;
+    }
 }
 </style>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const user = useUser()
-
-const props = defineProps({
+defineProps({
     description: {
         type: String,
         required: true
@@ -25,70 +23,37 @@ const props = defineProps({
     }
 })
 
-async function deleteQuiz() {
-    if (!user.value || !user.value.isAdmin || !confirm('Are you sure you want to delete this quiz?')) {
-        return
-    }
-
-    const res = await useFetch(
-        '/api/ADMIN/deleteQuiz?id=' + props.idQuiz,
-        {
-            headers: {
-                Authorization: 'Bearer ' + user.value.token,
-            }
-        }
-    )
-
-    if (!res.error.value) {
-        window.location.reload()
-    } else {
-        alert('Failed to delete quiz')
-    }
-}
-
-async function createRoom() {
-    const { error, data } = await useFetch('/api/RealTimeGame/createRoom', {
-        query: { quizId: props.idQuiz },
-        headers: {
-            Authorization: 'Bearer ' + user.value.token,
-        }
-    })
-
-    if (error.value) {
-        alert('Failed to create room')
-    } else {
-        navigateTo('/room/' + data.value?.roomId)
-    }
-}
+defineEmits(['click'])
 </script>
 
 <template>
-    <div class="quiz-card">
-        <span>
-            <div class="quiz-card-title-container">
-                <h3 class="quiz-card-title">
-                    {{ title }}
-                </h3>
+    <div class="quiz-card-container">
+        <div class="quiz-card">
+            <span>
+                <div class="quiz-card-title-container">
+                    <h3 class="quiz-card-title">
+                        {{ title }}
+                    </h3>
 
-                <home-player-score
-                    v-if="score !== undefined"
-                    :score="score"
-                    :max-score="maxScore"
-                />
-            </div>
+                    <home-player-score
+                        v-if="score !== undefined"
+                        :score="score"
+                        :max-score="maxScore"
+                    />
+                </div>
 
-            <p class="quiz-card-description">
-                {{ description }}
-            </p>
-        </span>
+                <p class="quiz-card-description">
+                    {{ description }}
+                </p>
+            </span>
 
-        <span class="quiz-card-button-container">
             <button
                 class="quiz-card-button"
+                @click="$emit('click')"
             >
                 More
             </button>
-        </span>
+        </div>
     </div>
 </template>
 
@@ -109,6 +74,12 @@ async function createRoom() {
 
     &-description {
         margin-bottom: 5px;
+    }
+
+    &-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 }
 

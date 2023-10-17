@@ -2,6 +2,13 @@
 const { data } = useFetch('/api/getQuizzes')
 const quizList = data
 const user = useUser()
+
+async function loadQuizzes() {
+    const { data } = await useFetch('/api/getQuizzes')
+    quizList.value = data.value
+}
+
+const quizDisplay = ref(-1)
 </script>
 
 <template>
@@ -19,8 +26,16 @@ const user = useUser()
                 :id-quiz="quiz.id"
                 :score="user?.scores[quiz.id]"
                 :max-score="quiz.questions.length"
+                @click="quizDisplay = index"
             />
         </div>
+
+        <home-quiz-info
+            v-if="quizDisplay !== -1"
+            :quiz="quizList![quizDisplay]"
+            @close="quizDisplay = -1"
+            @delete="loadQuizzes"
+        />
     </div>
 </template>
 
@@ -38,9 +53,8 @@ const user = useUser()
         margin-bottom: 20px;
     }
 
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap:10px
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
 }
 </style>
