@@ -121,6 +121,7 @@ export class DBManager {
     }
 
     clearQuizzes() {
+        this.db.exec('DELETE FROM score')
         this.db.exec('DELETE FROM quiz')
         this.db.exec('DELETE FROM question')
         this.db.exec('DELETE FROM answer')
@@ -162,6 +163,7 @@ export class DBManager {
     deleteQuiz(quizId: string) {
         const quiz = this.getQuiz(quizId)
         if (!quiz) { return null }
+        this.db.prepare('DELETE FROM score WHERE quizId = ?').run(quizId)
         this.db.prepare('DELETE FROM quiz WHERE id = ?').run(quizId)
         this.db.prepare('DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?)').run(quizId)
         this.db.prepare('DELETE FROM question WHERE quiz_id = ?').run(quizId)
