@@ -26,13 +26,16 @@ socket.on('roomUpdated', (room) => {
     roomRef.value = room
 })
 
+socket.on('gameStarted', () => {
+    navigateTo(`/room/${roomId}/game`)
+})
+
 onBeforeUnmount(() => {
-    socket.emit('leave', roomId, user.value.token)
     socket.close()
 })
 
 function startGame() {
-    socket.emit('startGame', roomId, user.value.token)
+    socket.emit('start', roomId)
 }
 </script>
 

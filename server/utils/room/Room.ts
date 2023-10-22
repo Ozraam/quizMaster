@@ -1,3 +1,4 @@
+import { Server, Socket } from 'socket.io'
 import { Game } from './Game'
 import { User } from '~/utils/types'
 
@@ -16,6 +17,8 @@ export class Room {
     status: RoomStatus = RoomStatus.Waiting
     id: number
     admin: User | null = null
+    usersSocket: Map<User, Socket> = new Map()
+    usersReady: Map<number, boolean> = new Map()
 
     constructor(game: Game) {
         this.game = game
@@ -34,10 +37,45 @@ export class Room {
         }
     }
 
-    addUser(user: User) {
+    leaveRoomBySocket(socket: Socket) {
+        const user = this.getUserBySocket(socket)
+        if (user) {
+            this.leaveRoom(user.id)
+        }
+    }
+
+    getUserBySocket(socket: Socket) {
+        return this.users.find(user => this.usersSocket.get(user) === socket)
+    }
+
+    addUser(user: User, socket: Socket) {
         if (this.users.length === 0) {
             this.admin = user
         }
         this.users.push(user)
+        this.usersSocket.set(user, socket)
+    }
+
+    getRoomWithoutGame() {
+        return {
+            id: this.id,
+            status: this.status,
+            admin: this.admin,
+            users: this.users,
+        }
+    }
+
+    startGame(io: Server) {
+        this.status = RoomStatus.Starting
+        io.to(this.id.toString()).emit('gameStarted', this.id)
+        this.usersReady = new Map(this.users.map(user => [user.id, false]))
+    }
+
+    isEveryoneReady() {
+        return [...this.usersReady.values()].every(ready => ready)
+    }
+
+    setReady(user: User) {
+        this.usersReady.set(user.id, true)
     }
 }

@@ -26,6 +26,15 @@ export default defineEventHandler((event) => {
             socket.on('disconnecting', () => {
                 console.log('disconnected', socket.id)
                 socket.broadcast.emit('message', `${socket.id} left`)
+                gameManager.leaveBySocket(socket, io)
+            })
+
+            socket.on('start', (room) => {
+                gameManager.startGame(room, io)
+            })
+
+            socket.on('ready', (room, token) => {
+                gameManager.ready(socket, room, token, io)
             })
         })
     }
