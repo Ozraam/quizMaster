@@ -1,3 +1,4 @@
+<!-- TODO: Style Rework -->
 <script setup lang="ts">
 const quizTitle = ref('Untitled')
 const quizDescription = ref('')
@@ -109,6 +110,10 @@ async function addQuizToDatabase() {
 </template>
 
 <style scoped lang="scss">
+main {
+    color: $primary;
+}
+
 h2 {
     margin: 0;
     margin-top: 0.1em;
@@ -121,7 +126,7 @@ h2 {
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
+    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     font-size: larger;

@@ -14,7 +14,7 @@ defineEmits(['click'])
     </li>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .question {
     list-style: none;
     margin: 0;
@@ -26,7 +26,7 @@ defineEmits(['click'])
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
+    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     min-width: 10em;

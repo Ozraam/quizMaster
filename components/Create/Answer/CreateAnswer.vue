@@ -16,8 +16,11 @@ const isCorrectRef = computed({
         isCorrectProps.value = value
     }
 })
-const emit = defineEmits<{(event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
-    (event: 'delete:answer'): void;}>()
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+    (event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
+    (event: 'delete:answer'): void;
+}>()
 
 watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     emit('update:answer', {
@@ -72,7 +75,7 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
         border: 1px solid #a8a8a8;
         border-radius: 5px;
         text-decoration: none;
-        color: black;
+        color: $primary;
         transition: border-color 0.3s ease-in-out;
         background-color: transparent;
         width: 100%;

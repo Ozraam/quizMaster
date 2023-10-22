@@ -1,3 +1,4 @@
+<!-- TODO: Style Rework -->
 <script setup>
 const user = useUser()
 if (!user.value) {
@@ -40,6 +41,9 @@ function logout() {
 </template>
 
 <style scoped lang="scss">
+main {
+    color: $primary;
+}
 .username {
     font-size: 1.5rem;
     font-weight: bold;
@@ -57,15 +61,16 @@ function logout() {
     cursor: pointer;
     transition: border-color 0.3s ease-in-out;
     width: fit-content;
+    color: $primary;
 
     &-admin {
-        color: black;
+        color: $primary;
         text-decoration: none;
     }
 }
 
 .btn:hover {
-    border-color: black;
+    border-color: $primary;
     border-width: 2px;
     padding: 9px;
 }

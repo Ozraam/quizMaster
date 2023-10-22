@@ -27,8 +27,13 @@ socket.on('roomUpdated', (room) => {
 })
 
 onBeforeUnmount(() => {
+    socket.emit('leave', roomId, user.value.token)
     socket.close()
 })
+
+function startGame() {
+    socket.emit('startGame', roomId, user.value.token)
+}
 </script>
 
 <template>
@@ -36,12 +41,10 @@ onBeforeUnmount(() => {
         <div
             v-if="roomRef"
         >
-            <span
-                v-for="userRoom in roomRef.users"
-                :key="userRoom.id"
-            >
-                {{ userRoom.username }}
-            </span>
+            <room-info
+                :room="roomRef"
+                @start-game="startGame"
+            />
         </div>
     </main>
 </template>

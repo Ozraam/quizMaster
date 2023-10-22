@@ -4,8 +4,9 @@ defineProps<{
     questionIndex: number;
 }>()
 
-defineEmits<
-    {(event: 'add-answer'): void;
+// eslint-disable-next-line func-call-spacing
+defineEmits<{
+    (event: 'add-answer'): void;
     (event: 'update:answer', answers: { text: string, isCorrect: boolean, id:number }, index: number): void;
     (event: 'delete:answer', index: number): void;
 }>()

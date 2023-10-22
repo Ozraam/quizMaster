@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import { Room, RoomStatus } from './Room'
 import { Game } from './Game'
 import { User } from '~/utils/types'
@@ -41,17 +41,18 @@ export class RealTimeGameManager {
 
         if (room.isUserInRoom(user.id)) {
             socket.emit('error', 'Already in room')
+            socket.emit('joined', room)
             return
         }
 
         user.password = ''
-        room.users.push(user)
+        room.addUser(user)
 
         socket.join(roomId)
 
         socket.emit('joined', room)
-        socket.broadcast.emit('message', `${user.username} joined`)
-        socket.broadcast.emit('roomUpdated', room)
+        socket.to(roomId).emit('message', `${user.username} joined`)
+        socket.to(roomId).emit('roomUpdated', room)
     }
 
     createRoom(quizId: string) {
@@ -60,7 +61,7 @@ export class RealTimeGameManager {
         return room
     }
 
-    async leave(socket: Socket, roomId: string, token: string) {
+    async leave(socket: Socket, roomId: string, token: string, io: Server) {
         const user : User | null = await Auth.getUser(token)
 
         if (!user) {
@@ -72,6 +73,8 @@ export class RealTimeGameManager {
             socket.emit('error', 'Room not found')
             return
         }
+
+        console.log('leave', roomId, user.id)
 
         const room = this.rooms.get(roomId)!
 
@@ -89,7 +92,7 @@ export class RealTimeGameManager {
         socket.leave(roomId)
 
         socket.emit('left', room)
-        socket.broadcast.emit('message', `${user.username} left`)
-        socket.broadcast.emit('roomUpdated', room)
+        io.to(roomId).emit('message', `${user.username} left`)
+        io.to(roomId).emit('roomUpdated', room)
     }
 }

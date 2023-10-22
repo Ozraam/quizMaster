@@ -70,7 +70,7 @@ defineEmits(['update:question', 'update:answer', 'add-answer', 'delete:answer', 
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
+    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     min-width: 10em;
@@ -133,7 +133,7 @@ defineEmits(['update:question', 'update:answer', 'add-answer', 'delete:answer', 
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: black;
+    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     width: 100%;

@@ -20,7 +20,7 @@ export default defineEventHandler((event) => {
             })
 
             socket.on('leave', (room, token) => {
-                gameManager.leave(socket, room, token)
+                gameManager.leave(socket, room, token, io)
             })
 
             socket.on('disconnecting', () => {

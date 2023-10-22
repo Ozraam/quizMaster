@@ -13,3 +13,9 @@ const roomId = route.params.roomId
         </nuxt-link>
     </main>
 </template>
+
+<style scoped lang="scss">
+main {
+    color: $primary;
+}
+</style>
