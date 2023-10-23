@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { io } from 'socket.io-client'
 const user = useUser()
 
 if (!user.value) {
@@ -12,7 +11,7 @@ const route = useRoute()
 
 const roomId = route.params.roomId
 
-const socket = io()
+const socket = useSocket()
 
 socket.on('waitingConnection', () => {
     socket.emit('join', roomId, user.value.token)
@@ -31,7 +30,7 @@ socket.on('gameStarted', () => {
 })
 
 onBeforeUnmount(() => {
-    socket.close()
+    socket.removeAllListeners()
 })
 
 function startGame() {

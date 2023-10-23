@@ -51,8 +51,6 @@ defineExpose({
             />
         </ul>
     </div>
-
-    <div class="quiz-container" />
 </template>
 
 <style scoped>

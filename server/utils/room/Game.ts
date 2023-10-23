@@ -13,6 +13,8 @@ export class Game {
     constructor(quizId : string) {
         this.quizId = quizId
         const tempQuiz = useDatabase().dbManager.getQuiz(quizId)
+        console.log(tempQuiz)
+
         if (tempQuiz) {
             this.quiz = tempQuiz
         } else {
@@ -22,14 +24,15 @@ export class Game {
 
     sendQuestion(room: Room, io: Server) {
         const question = this.quiz.questions[this.currentQuestion]
-        io.to(room.id.toString()).emit('question', question)
+        const sendQuestion = { ...question, index: this.currentQuestion + 1 }
+        io.to(room.id.toString()).emit('question', sendQuestion)
         setTimeout(() => {
             this.requestAnswers(room, io)
         }, this.timeToAnswer * 1000)
     }
 
     requestAnswers(room: Room, io: Server) {
-        io.to(room.id.toString()).emit('requestAnswers')
+        io.to(room.id.toString()).emit('requestAnswer')
     }
 
     nextQuestion(room: Room, io: Server) {
@@ -46,11 +49,11 @@ export class Game {
         io.to(room.id.toString()).emit('gameEnded')
     }
 
-    // TODO : socket get
     setUsersAnswers(userId: number, questionId: number, answers: number, room: Room, io: Server) {
         const usersAnswers = this.usersAnswers.get(questionId) || new Map()
         usersAnswers.set(userId, answers)
         this.usersAnswers.set(questionId, usersAnswers)
+        console.log(this.usersAnswers, room.users.length)
         if (usersAnswers.size === room.users.length) {
             this.nextQuestion(room, io)
         }

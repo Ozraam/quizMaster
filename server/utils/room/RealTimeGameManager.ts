@@ -130,7 +130,18 @@ export class RealTimeGameManager {
         const user : User = (await Auth.getUser(token))!
 
         room.setReady(user)
+        console.log(room.isEveryoneReady())
 
-        console.log(room.usersReady, room.users)
+        if (room.isEveryoneReady()) {
+            room.game.sendQuestion(room, io)
+        }
+    }
+
+    async setUsersAnswers(token: string, answers: number, roomId: number, io: Server) {
+        const userId = (await Auth.getUser(token))!.id
+        const room = this.rooms.get(roomId.toString())
+        if (room) {
+            room.game.setUsersAnswers(userId, room.game.currentQuestion, answers, room, io)
+        }
     }
 }
