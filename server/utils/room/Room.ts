@@ -78,4 +78,22 @@ export class Room {
     setReady(user: User) {
         this.usersReady.set(user.id, true)
     }
+
+    getResults(io: Server) {
+        const result = this.game.getResults()
+
+        let object = {}
+
+        result.forEach((value, key) => {
+            const user = this.users.find(user => user.id === key)
+            if (user) {
+                object = {
+                    ...object,
+                    [user.username]: value,
+                }
+            }
+        })
+
+        io.to(this.id.toString()).emit('sendresults', object)
+    }
 }

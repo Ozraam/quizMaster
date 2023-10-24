@@ -8,12 +8,11 @@ export class Game {
     usersAnswers : Map<number, Map<number, number>> = new Map()
     currentQuestion = 0
 
-    timeToAnswer = 30
+    timeToAnswer = 2
 
     constructor(quizId : string) {
         this.quizId = quizId
         const tempQuiz = useDatabase().dbManager.getQuiz(quizId)
-        console.log(tempQuiz)
 
         if (tempQuiz) {
             this.quiz = tempQuiz
@@ -53,9 +52,34 @@ export class Game {
         const usersAnswers = this.usersAnswers.get(questionId) || new Map()
         usersAnswers.set(userId, answers)
         this.usersAnswers.set(questionId, usersAnswers)
-        console.log(this.usersAnswers, room.users.length)
+
         if (usersAnswers.size === room.users.length) {
             this.nextQuestion(room, io)
         }
+    }
+
+    sendResults(room: Room, io: Server) {
+        const results = this.getResults()
+        console.log(results)
+
+        io.to(room.id.toString()).emit('sendresults', results)
+    }
+
+    getResults() {
+        const results : Map<number, number> = new Map()
+
+        this.usersAnswers.forEach((usersAnswers, questionId) => {
+            usersAnswers.forEach((answer, userId) => {
+                const userScore = results.get(userId) || 0
+                const answerObject = this.quiz.questions[questionId].answers[answer]
+                if (answer && answerObject.isCorrect) {
+                    results.set(userId, userScore + 1)
+                } else {
+                    results.set(userId, userScore)
+                }
+            })
+        })
+
+        return results
     }
 }

@@ -144,4 +144,11 @@ export class RealTimeGameManager {
             room.game.setUsersAnswers(userId, room.game.currentQuestion, answers, room, io)
         }
     }
+
+    getResults(roomId: string, io: Server) {
+        const room = this.rooms.get(roomId)
+        if (room) {
+            room.getResults(io)
+        }
+    }
 }

@@ -29,6 +29,10 @@ onMounted(() => {
     socket.on('requestAnswer', () => {
         socket.emit('answer', roomId, user.value.token, answerSelected.value?.id)
     })
+
+    socket.on('gameEnded', () => {
+        navigateTo(`/room/${roomId}/results`)
+    })
 })
 
 onBeforeUnmount(() => {
@@ -99,7 +103,7 @@ onBeforeUnmount(() => {
     }
 
     &.animate::after {
-        animation: rotate 30s linear infinite;
+        animation: rotate 10s linear infinite;
     }
 }
 

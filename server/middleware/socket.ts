@@ -40,6 +40,10 @@ export default defineEventHandler((event) => {
             socket.on('answer', (room, token, answers) => {
                 gameManager.setUsersAnswers(token, answers, room, io)
             })
+
+            socket.on('getResults', (roomId) => {
+                gameManager.getResults(roomId, io)
+            })
         })
     }
 })
