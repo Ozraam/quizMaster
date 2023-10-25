@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const user = useUser()
-useFetchUser()
+onMounted(() => {
+    useFetchUser()
+})
 </script>
 
 <template>

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Server } from 'socket.io'
 import { RealTimeGameManager } from '../utils/room/RealTimeGameManager'
 
@@ -9,7 +8,7 @@ export default defineEventHandler((event) => {
     if (!io) {
         io = new Server(event.node.res.socket?.server)
         io.on('connection', (socket) => {
-            console.log('Connection', socket.id)
+
         })
 
         io.on('connect', (socket) => {
@@ -24,7 +23,6 @@ export default defineEventHandler((event) => {
             })
 
             socket.on('disconnecting', () => {
-                console.log('disconnected', socket.id)
                 socket.broadcast.emit('message', `${socket.id} left`)
                 gameManager.leaveBySocket(socket, io)
             })

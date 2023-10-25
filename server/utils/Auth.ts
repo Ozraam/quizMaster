@@ -74,6 +74,7 @@ export class Auth {
 
     static async getUser(token: string): Promise<User | null> {
         const user = await Auth.isSessionValid(token)
+
         if (!user) {
             return null
         }

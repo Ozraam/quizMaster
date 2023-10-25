@@ -8,43 +8,40 @@ export function useUser() {
     return user
 }
 
-export async function useResetSession() {
-    const { reset } = await useSession()
-    reset()
+export function useResetSession() {
+    localStorage.removeItem('token')
     user.value = null
 }
 
-export async function setToken(token: string) {
-    const { update } = await useSession()
-    update({ token })
+export function setToken(token: string) {
+    localStorage.setItem('token', token)
+
     fetchUser()
 }
 
 async function fetchUser() {
-    const { session } = await useSession()
-    const htw = watch(session, async (session) => {
-        const token = session?.token
-        if (!token) {
-            return null
-        }
+    const token = localStorage.getItem('token')
 
-        const { data, error } = await useFetch('/api/loggedUser', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+    if (!token) {
+        return null
+    }
 
-        if (error.value) {
-            return null
-        }
+    const res = await fetch('/api/loggedUser', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
 
-        if (!data.value) {
-            return null
-        }
+    const data = await res.json()
 
-        user.value = data.value
-        user.value.token = token
+    if (res.status !== 200) {
+        return null
+    }
 
-        htw()
-    }, { immediate: true })
+    if (!data) {
+        return null
+    }
+
+    user.value = data
+    user.value.token = token
 }

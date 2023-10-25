@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Server, Socket } from 'socket.io'
 import { Room, RoomStatus } from './Room'
 import { Game } from './Game'
@@ -75,8 +74,6 @@ export class RealTimeGameManager {
             return
         }
 
-        console.log('leave', roomId, user.id)
-
         const room = this.rooms.get(roomId)!
 
         if (room.status === RoomStatus.Starting) {
@@ -130,7 +127,6 @@ export class RealTimeGameManager {
         const user : User = (await Auth.getUser(token))!
 
         room.setReady(user)
-        console.log(room.isEveryoneReady())
 
         if (room.isEveryoneReady()) {
             room.game.sendQuestion(room, io)

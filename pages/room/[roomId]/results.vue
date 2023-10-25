@@ -17,7 +17,6 @@ const resultsRef : Ref<{results: any, quizLength: number} | null> = ref(null)
 onMounted(() => {
     socket = useSocket()
     socket.on('sendresults', (results) => {
-        console.log(results, 'results')
         resultsRef.value = results
     })
     socket.emit('getResults', roomId)

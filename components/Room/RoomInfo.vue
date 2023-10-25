@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const user = useUser()
+const loggedUser = useUser()
 defineProps({
     room: {
         type: Object,
@@ -17,7 +17,7 @@ defineEmits(['start-game'])
         </h1>
 
         <button
-            v-if="room.admin.id == user.id"
+            v-if="room.admin.id == loggedUser.id"
             @click="$emit('start-game')"
         >
             Start Game

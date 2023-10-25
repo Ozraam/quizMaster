@@ -8,7 +8,7 @@ export class Game {
     usersAnswers : Map<number, Map<number, number>> = new Map()
     currentQuestion = 0
 
-    timeToAnswer = 2
+    timeToAnswer = 10
 
     constructor(quizId : string) {
         this.quizId = quizId
@@ -60,7 +60,6 @@ export class Game {
 
     sendResults(room: Room, io: Server) {
         const results = this.getResults()
-        console.log(results)
 
         io.to(room.id.toString()).emit('sendresults', results)
     }
@@ -72,7 +71,6 @@ export class Game {
             usersAnswers.forEach((answer, userId) => {
                 const userScore = results.get(userId) || 0
                 const answerObject = this.quiz.questions[questionId].answers.find((a: Answer) => a.id === answer)
-                console.log(answerObject, answer)
 
                 if (answerObject && answerObject.isCorrect) {
                     results.set(userId, userScore + 1)
