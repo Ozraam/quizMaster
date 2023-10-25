@@ -94,6 +94,13 @@ export class Room {
             }
         })
 
-        io.to(this.id.toString()).emit('sendresults', object)
+        const sorted = Object.entries(object).sort((a :any, b:any) => b[1] - a[1])
+
+        const message = {
+            results: sorted,
+            quizLength: this.game.quiz.questions.length,
+        }
+
+        io.to(this.id.toString()).emit('sendresults', message)
     }
 }

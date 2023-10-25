@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
 import { Room } from './Room'
-import { Quiz } from '~/utils/types'
+import { Answer, Quiz } from '~/utils/types'
 
 export class Game {
     quizId : string
@@ -71,8 +71,10 @@ export class Game {
         this.usersAnswers.forEach((usersAnswers, questionId) => {
             usersAnswers.forEach((answer, userId) => {
                 const userScore = results.get(userId) || 0
-                const answerObject = this.quiz.questions[questionId].answers[answer]
-                if (answer && answerObject.isCorrect) {
+                const answerObject = this.quiz.questions[questionId].answers.find((a: Answer) => a.id === answer)
+                console.log(answerObject, answer)
+
+                if (answerObject && answerObject.isCorrect) {
                     results.set(userId, userScore + 1)
                 } else {
                     results.set(userId, userScore)
