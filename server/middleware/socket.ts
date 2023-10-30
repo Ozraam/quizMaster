@@ -7,9 +7,6 @@ const gameManager = RealTimeGameManager.getInstance()
 export default defineEventHandler((event) => {
     if (!io) {
         io = new Server(event.node.res.socket?.server)
-        io.on('connection', (socket) => {
-
-        })
 
         io.on('connect', (socket) => {
             socket.emit('waitingConnection')
