@@ -7,7 +7,17 @@ export enum LoginError {
     PasswordIncorrect
 }
 
+/**
+ * Static Class that handles authentication.
+ * @todo refactor to use dbManager instead of direct database access
+ */
 export class Auth {
+    /**
+     * Creates a new user with the given username and password.
+     * @param username username of the user to signup
+     * @param password password of the user to signup
+     * @returns true if the user was created, false if the user already exists
+     */
     static signup(username: string, password: string) {
         const db = DBManager.getInstance().getDB()
         username = username.toLowerCase()
@@ -30,6 +40,12 @@ export class Auth {
         return true
     }
 
+    /**
+     * Logs in the user with the given username and password.
+     * @param username username of the user to login
+     * @param password password of the user to login
+     * @returns user token if login was successful, LoginError otherwise
+     */
     static async login(username: string, password: string): Promise<string | LoginError> {
         const db = DBManager.getInstance().getDB()
         username = username.toLowerCase()
@@ -49,18 +65,28 @@ export class Auth {
         return token
     }
 
+    /**
+     * generates a new token for the given user using JWT that expires after 7 days.
+     * @param user user to generate a token for
+     * @returns new token for the given user
+     */
     static async generateSessionToken(user: User): Promise<string> {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
 
         const jwt = await new jose.SignJWT({ user })
             .setProtectedHeader({ alg: process.env.JWT_ALGORITHM! })
             .setIssuedAt()
-            .setExpirationTime('5h')
+            .setExpirationTime('7d')
             .sign(secret)
 
         return jwt
     }
 
+    /**
+     * Checks if the given token is valid.
+     * @param token token to check
+     * @returns user if the token is valid, null otherwise
+     */
     static async isSessionValid(token: string): Promise<User | null> {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
 
@@ -72,6 +98,11 @@ export class Auth {
         }
     }
 
+    /**
+     * Returns the user with the given token.
+     * @param token token of the user to get
+     * @returns user if the token is valid, null otherwise
+     */
     static async getUser(token: string): Promise<User | null> {
         const user = await Auth.isSessionValid(token)
 
@@ -96,6 +127,9 @@ export class Auth {
         return user
     }
 
+    /**
+     * deletes all users that are not admins or superadmins.
+     */
     static clearUsers() {
         const db = DBManager.getInstance().getDB()
 
