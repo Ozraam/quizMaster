@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-named-as-default
-import Database, { Database as DatabseClass } from 'better-sqlite3'
+import Database, { Database as DatabaseClass } from 'better-sqlite3'
 import { Answer, Question, Quiz, User, Score } from '~/utils/types'
 
 /**
@@ -9,7 +9,7 @@ import { Answer, Question, Quiz, User, Score } from '~/utils/types'
 export class DBManager {
     // eslint-disable-next-line no-use-before-define
     private static instance: DBManager
-    private db: DatabseClass
+    private db: DatabaseClass
 
     private constructor() {
         this.db = new Database('./server/utils/quizmaster.sqlite')
@@ -31,7 +31,7 @@ export class DBManager {
      * Returns the database.
      * @returns the database
      */
-    getDB(): DatabseClass {
+    getDB(): DatabaseClass {
         return this.db
     }
 

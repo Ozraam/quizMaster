@@ -13,16 +13,13 @@ defineEmits<{
 </script>
 
 <template>
-    <h3>
-        Answers
-        <button
-            aria-label="Add answer"
-            class="add-answer-button"
-            @click="$emit('add-answer')"
-        >
-            +
-        </button>
-    </h3>
+    <button
+        aria-label="Add answer"
+        class="add-answer-button"
+        @click="$emit('add-answer')"
+    >
+        ➕ Add answer
+    </button>
 
     <ul class="answer-list">
         <create-answer
@@ -36,22 +33,22 @@ defineEmits<{
     </ul>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .answer-list {
     margin: 0;
     padding: 0;
 }
 
 .add-answer-button {
-    font-size: larger;
-    background-color: transparent;
-    border: 1px solid #a8a8a8;
+    background-color: $primary;
+    color: $secondary;
+    border: 1px solid rgba($secondary, 0.2);
     border-radius: 5px;
     cursor: pointer;
-    transition: border-color 0.3s ease-in-out;
-}
+    margin-bottom: 10px;
 
-.add-answer-button:hover {
-    border-color: black;
+    &:hover {
+        background-color: darken($primary, 10%);
+    }
 }
 </style>

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-const textRef = ref('')
-
 const props = defineProps<{
     answer: { text: string, isCorrect: boolean, id:number };
     questionIndex: number;
 }>()
 
+const textRef = ref(props.answer.text)
 const isCorrectProps = ref(props.answer.isCorrect)
 
 const isCorrectRef = computed({
@@ -38,7 +37,7 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
                 <input
                     type="radio"
                     :name="'answer-correct' + questionIndex"
-                    class="answer-correct"
+                    class="answer-correct-switch"
                     :checked="isCorrectRef"
                     @change="isCorrectRef = !isCorrectRef"
                 >
@@ -57,7 +56,7 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
                 class="delete-answer-button"
                 @click="$emit('delete:answer')"
             >
-                X
+                ❌
             </button>
         </div>
     </li>
@@ -75,7 +74,6 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
         border: 1px solid #a8a8a8;
         border-radius: 5px;
         text-decoration: none;
-        color: $primary;
         transition: border-color 0.3s ease-in-out;
         background-color: transparent;
         width: 100%;
@@ -85,12 +83,63 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
 .answer-content {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .answer-correct {
-    display: flex;
-    align-items: center;
-}
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 2px solid $secondary;
+        border-radius: 20px;
+        overflow: hidden;
+
+        input {
+            appearance: none;
+            width: 20px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 5px;
+                height: 20px;
+                border-radius: 30px;
+                background-color: $wrong;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                transition: background-color 0.2s ease-in-out;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: $secondary;
+                left: 0;
+                top: 15px;
+                transition: top 0.2s ease-in-out;
+            }
+
+            &:checked {
+
+                &::after {
+                    top: 0;
+                }
+
+                &::before {
+                    background-color: $valid;
+                }
+            }
+        }
+    }
 
 .delete-answer-button {
     background-color: transparent;
@@ -99,5 +148,9 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     cursor: pointer;
     transition: border-color 0.3s ease-in-out;
     aspect-ratio: 1;
+
+    &:hover {
+        background-color: #a8a8a8;
+    }
 }
 </style>

@@ -45,6 +45,7 @@ onMounted(() => {
 
                 <li>
                     <nuxt-link
+                        v-if="user"
                         to="/create"
                         class="nav-link"
                     >

@@ -3,44 +3,36 @@ defineEmits(['click'])
 </script>
 
 <template>
-    <li class="question">
-        <button
-            aria-label="Add question"
-            class="add-question-button"
-            @click="$emit('click')"
-        >
-            +
-        </button>
-    </li>
+    <button
+        aria-label="Add question"
+        class="add-question-button"
+        @click="$emit('click')"
+    >
+        ➕ Add question
+    </button>
 </template>
 
 <style scoped lang="scss">
-.question {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    position: relative;
-
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #a8a8a8;
-    border-radius: 5px;
-    text-decoration: none;
-    color: $primary;
-    transition: border-color 0.3s ease-in-out;
-    background-color: transparent;
-    min-width: 10em;
-    width: 10em;
-    aspect-ratio: 1/1.5;
-    overflow: auto;
-}
-
 .add-question-button {
-    font-size: larger;
-    background-color: transparent;
-    border: none;
-    width: 100%;
-    height: 100%;
+    background-color: $primary;
+    border: 1px solid $secondary;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
     cursor: pointer;
+
+    &:hover {
+        background-color: $secondary;
+        color: $primary;
+        border: 1px solid $primary;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
 }
 </style>

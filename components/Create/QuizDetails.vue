@@ -29,7 +29,7 @@ watch(description, (newDescription) => {
 </script>
 
 <template>
-    <div>
+    <div class="quiz-details">
         <div class="form-group">
             <label for="quiz-title">Quiz title :</label>
 
@@ -51,7 +51,7 @@ watch(description, (newDescription) => {
                 v-model="description"
                 name="quiz-description"
                 cols="30"
-                rows="10"
+                rows="2"
                 placeholder="Description"
             />
         </div>
@@ -74,7 +74,6 @@ h1 {
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     width: 100%;
@@ -87,9 +86,16 @@ h1 {
     border: 1px solid #a8a8a8;
     border-radius: 5px;
     text-decoration: none;
-    color: $primary;
     transition: border-color 0.3s ease-in-out;
     background-color: transparent;
     width: 100%;
+}
+
+.quiz-details {
+    background-color: $primary;
+    color: $secondary;
+    padding: 10px;
+    border-radius: 7px;
+    margin-top: 5px;
 }
 </style>

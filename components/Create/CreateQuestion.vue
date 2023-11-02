@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
     question: {
         type: Object,
         required: true
@@ -7,135 +7,66 @@ const props = defineProps({
     questionIndex: {
         type: Number,
         required: true
-    }
+    },
 })
 
-const questionRef = ref(props.question.text)
-
-defineEmits(['update:question', 'update:answer', 'add-answer', 'delete:answer', 'delete:question'])
+defineEmits(['delete:question', 'edit:question'])
 </script>
 
 <template>
-    <li class="question">
+    <li
+        class="question"
+        @click="$emit('edit:question')"
+    >
         <h3 class="question-number">
-            Question 1
+            Question {{ questionIndex + 1 }}
         </h3>
 
-        <button
-            class="delete-question-button"
-            aria-label="Delete question"
-            @click="$emit('delete:question')"
-        >
-            X
-        </button>
+        <div class="question-container">
+            <p class="question-text-container">
+                {{ question.text }}
+            </p>
 
-        <div class="question-content">
-            <div class="question-text-container">
-                <label for="question-text">Question text :</label>
-
-                <input
-                    id="question-text"
-                    v-model="questionRef"
-                    type="text"
-                    name="question-text"
-                    placeholder="Question text"
-                    class="question-text"
-                    @input="e => $emit('update:question', {
-                        ...question,
-                        text: questionRef
-                    })"
-                >
-            </div>
+            <button
+                class="question-delete"
+                aria-label="Delete question"
+                @click="$emit('delete:question')"
+            >
+                ❌
+            </button>
         </div>
-
-        <create-answer-list
-            :answers="question.answers"
-            :question-index="questionIndex"
-            @update:answer="(answers, index) => $emit('update:answer', answers, index)"
-            @add-answer="$emit('add-answer')"
-            @delete:answer="index => $emit('delete:answer', index)"
-        />
     </li>
 </template>
 
 <style scoped lang="scss">
 .question {
+    background-color: $primary;
     list-style: none;
-    margin: 0;
-    padding: 0;
-    position: relative;
-
-    margin-top: 10px;
+    color: $secondary;
     padding: 10px;
-    border: 1px solid #a8a8a8;
-    border-radius: 5px;
-    text-decoration: none;
-    color: $primary;
-    transition: border-color 0.3s ease-in-out;
-    background-color: transparent;
-    min-width: 10em;
-    width: 10em;
-    aspect-ratio: 1/1.5;
-    overflow: auto;
-}
-.delete-question-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 5px;
-    background-color: transparent;
-    border: 1px solid #a8a8a8;
     border-radius: 5px;
     cursor: pointer;
-    transition: border-color 0.3s ease-in-out;
-    aspect-ratio: 1;
-}
+    max-width: 30vw;
 
-.delete-question-button:hover {
-    border-color: black;
-}
+    &-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        max-width: 100%;
+    }
 
-.question:hover {
-    border-color: black;
-}
+    &-text-container {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 
-.question label {
-    font-size: small;
-}
+    &:hover {
+        transform: scale(1.05);
+    }
 
-.question h3 {
-    margin: 0;
-    margin-top: 0.1em;
-    padding: 0;
-}
-
-.question::-webkit-scrollbar {
-    /* personalize scrollbar */
-    width: 5px;
-    height: 5px;
-}
-
-.question::-webkit-scrollbar-track {
-    /* personalize scrollbar */
-    background: #f1f1f1;
-    border-radius: 5px;
-}
-
-.question::-webkit-scrollbar-thumb {
-    /* personalize scrollbar */
-    background: #888;
-    border-radius: 5px;
-}
-
-.question-text {
-    margin-top: 2px;
-    padding: 10px;
-    border: 1px solid #a8a8a8;
-    border-radius: 5px;
-    text-decoration: none;
-    color: $primary;
-    transition: border-color 0.3s ease-in-out;
-    background-color: transparent;
-    width: 100%;
+    &-delete {
+        cursor: pointer;
+    }
 }
 </style>

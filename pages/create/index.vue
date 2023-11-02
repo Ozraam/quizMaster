@@ -94,11 +94,13 @@ async function addQuizToDatabase() {
             @update:description="quizDescription = $event"
         />
 
-        <h2>
-            Questions
-        </h2>
+        <section>
+            <h2>
+                Questions
+            </h2>
 
-        <create-questions-list ref="questionsList" />
+            <create-questions-list ref="questionsList" />
+        </section>
 
         <button
             class="submit-button"

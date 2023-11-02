@@ -2,6 +2,11 @@ import { Server, Socket } from 'socket.io'
 import { Game } from './Game'
 import { User } from '~/utils/types'
 
+/**
+ * Enum for the status of a room.
+ * @enum {string}
+ * @readonly
+ */
 export enum RoomStatus {
     Waiting = 'waiting',
     Starting = 'starting',
@@ -10,6 +15,9 @@ export enum RoomStatus {
     Ended = 'ended',
 }
 
+/**
+ * Class that represents a room.
+ */
 export class Room {
     static roomIds = 0
     users : User[] = []

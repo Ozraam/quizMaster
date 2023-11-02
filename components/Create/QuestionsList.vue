@@ -4,16 +4,19 @@ defineExpose({
 })
 
 const questions: Ref<Array<{ text: string, answers: any; id:number }>> = ref([])
+const currentEditingQuestion = ref(-1)
 
 let answerID = 0
 let questionID = 0
 
 function addQuestion() {
     questions.value.push({
-        text: '',
+        text: 'Untitled question',
         answers: [],
         id: questionID++
     })
+
+    currentEditingQuestion.value = questions.value.length - 1
 }
 
 function addAnswer(questionIndex: number) {
@@ -35,7 +38,11 @@ function updateAnswer(answer: { text: string, isCorrect: boolean }, index: numbe
 }
 
 function deleteAnswer(index: number, indexAnswer: number) {
-    questions.value[index].answers.splice(indexAnswer, 1)
+    const ques = questions.value[index].answers.splice(indexAnswer, 1)
+
+    if (ques[0].isCorrect && questions.value[index].answers.length > 0) {
+        questions.value[index].answers[0].isCorrect = true
+    }
 }
 
 function deleteQuestion(index: number) {
@@ -44,48 +51,59 @@ function deleteQuestion(index: number) {
 </script>
 
 <template>
-    <ul class="question-list">
+    <create-question-adder @click="addQuestion" />
+
+    <transition-group
+        name="questions"
+        tag="ul"
+        class="questions-list"
+    >
         <create-question
             v-for="(question, index) in questions"
             :key="question.id"
             :question="question"
             :question-index="index"
-            @update:question="questions[index] = $event"
-            @add-answer="addAnswer(index)"
-            @update:answer="(answer, indexAnswer) => updateAnswer(answer, index, indexAnswer)"
-            @delete:answer="(indexAnswer) => deleteAnswer(index, indexAnswer)"
-            @delete:question="() => deleteQuestion(index)"
+            @delete:question="deleteQuestion(index)"
+            @edit:question="currentEditingQuestion = index"
         />
+    </transition-group>
 
-        <create-question-adder @click="addQuestion" />
-    </ul>
+    <create-question-editor
+        v-if="currentEditingQuestion !== -1"
+        :question="questions[currentEditingQuestion]"
+        :question-index="currentEditingQuestion"
+        @close="currentEditingQuestion = -1"
+        @add-answer="addAnswer(currentEditingQuestion)"
+        @update:question="(question, index) => questions[index] = question"
+        @delete:answer="(index) => deleteAnswer(currentEditingQuestion, index)"
+        @update:answer="(answer, index) => updateAnswer(answer, currentEditingQuestion, index)"
+    />
 </template>
 
-<style scoped>
-.question-list {
+<style>
+.questions-list {
     margin: 0;
     padding: 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1em;
-    overflow-x: auto;
     max-width: 100%;
 }
+</style>
 
-.question-list::-webkit-scrollbar {
-    /* personalize scrollbar */
-    width: 10px;
-    height: 5px;
+<style scoped lang="scss">
+.questions-enter-active,
+.questions-leave-active, .questions-move {
+    transition: all 0.3s ease-in-out;
 }
 
-.question-list::-webkit-scrollbar-track {
-    /* personalize scrollbar */
-    background: #f1f1f1;
-    border-radius: 5px;
+.questions-enter-from,
+.questions-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 
-.question-list::-webkit-scrollbar-thumb {
-    /* personalize scrollbar */
-    background: #888;
-    border-radius: 5px;
+.questions-leave-active {
+  position: absolute;
 }
 </style>
