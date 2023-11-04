@@ -9,26 +9,29 @@ const props = defineProps({
 
 const user = useUser()
 
-async function deleteQuiz() {
-    if (!user.value || !user.value.isAdmin || !confirm('Are you sure you want to delete this quiz?')) {
+function deleteQuiz() {
+    if (!user.value || !user.value.isAdmin) {
         return
     }
 
-    const res = await useFetch(
-        '/api/ADMIN/deleteQuiz?id=' + props.quiz.id,
-        {
-            headers: {
-                Authorization: 'Bearer ' + user.value.token,
+    useConfirm('Test', 'Are you sure you want to delete this quiz?', async () => {
+        const res = await useFetch(
+            '/api/ADMIN/deleteQuiz?id=' + props.quiz.id,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + user.value.token,
+                }
             }
-        }
-    )
+        )
 
-    if (!res.error.value) {
-        emit('delete')
-        emit('close')
-    } else {
-        addNotification('error', 'Failed to delete quiz', true)
-    }
+        if (!res.error.value) {
+            emit('delete')
+            emit('close')
+            addNotification('success', 'Quiz deleted')
+        } else {
+            addNotification('error', 'Failed to delete quiz', true)
+        }
+    })
 }
 
 async function createRoom() {

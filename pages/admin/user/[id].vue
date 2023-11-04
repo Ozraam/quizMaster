@@ -20,24 +20,25 @@ const user = (await useFetch('/api/ADMIN/getUser', {
 const info = ref('')
 
 function deleteUser() {
-    if (!loggedUser.value || !user || !confirm('Are you sure?')) {
+    if (!loggedUser.value || !user) {
         return
     }
-
-    useFetch('/api/ADMIN/user', {
-        method: 'DELETE',
-        body: user,
-        headers: {
-            Authorization: `Bearer ${loggedUser.value.token}`,
-            'Content-Type': 'application/json'
-        },
-    }).then((res) => {
-        if (!res.error.value) {
-            info.value = 'User deleted'
-            navigateTo('/admin')
-        } else {
-            info.value = 'User delete error'
-        }
+    useConfirm('Delete user', 'Are you sure you want to delete this user?', () => {
+        useFetch('/api/ADMIN/user', {
+            method: 'DELETE',
+            body: user,
+            headers: {
+                Authorization: `Bearer ${loggedUser.value.token}`,
+                'Content-Type': 'application/json'
+            },
+        }).then((res) => {
+            if (!res.error.value) {
+                info.value = 'User deleted'
+                navigateTo('/admin')
+            } else {
+                info.value = 'User delete error'
+            }
+        })
     })
 }
 </script>

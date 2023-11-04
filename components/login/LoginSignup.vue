@@ -13,11 +13,9 @@ async function signUp() {
     })
     // status code 409 = username already exists
     if (response.error.value) {
-        // document.querySelector('.error').innerHTML = 'Username already exists'
         emit('info-message', 'Username already exists', true)
     } else {
         // display success message
-        // document.querySelector('.error').innerHTML = 'Account created successfully'
         emit('info-message', 'Account created successfully')
         emit('signup')
     }

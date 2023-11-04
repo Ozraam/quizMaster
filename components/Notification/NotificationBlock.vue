@@ -1,14 +1,10 @@
 <script setup lang="ts">
 defineProps({
     notification: {
-        type: Object as PropType<{ title: string, text: string, id: number, warning: boolean }>,
+        type: Object as PropType<{ title: string, text: string, id: number, warning: boolean, close: () => void }>,
         required: true
     }
 })
-
-function deleteNotification() {
-    // TODO: delete notification
-}
 </script>
 
 <template>
@@ -28,7 +24,7 @@ function deleteNotification() {
 
         <button
             class="notification__action"
-            @click="deleteNotification"
+            @click="notification.close"
         >
             ❌
         </button>

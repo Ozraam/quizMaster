@@ -6,32 +6,30 @@ definePageMeta({
     middleware: ['admin']
 })
 
-async function clearUser() {
-    if (!confirm('Are you sure you want to clear all users?')) {
-        return
-    }
-    await useFetch('/api/ADMIN/clearUsers ', {
-        method: 'delete',
-        headers: {
-            Authorization: `Bearer ${user.value.token}`
-        }
+function clearUser() {
+    useConfirm('Clear user', 'Are you sure you want to clear all users?', async () => {
+        await useFetch('/api/ADMIN/clearUsers ', {
+            method: 'delete',
+            headers: {
+                Authorization: `Bearer ${user.value.token}`
+            }
+        })
+        info.value = 'Users cleared'
+        clearInfoIn(3000)
     })
-    info.value = 'Users cleared'
-    clearInfoIn(3000)
 }
 
-async function clearQuiz() {
-    if (!confirm('Are you sure you want to clear the quiz?')) {
-        return
-    }
-    await useFetch('/api/ADMIN/clearQuiz ', {
-        method: 'delete',
-        headers: {
-            Authorization: `Bearer ${user.value.token}`
-        }
+function clearQuiz() {
+    useConfirm('Delete quiz', 'Are you sure you want to clear the quiz?', async () => {
+        await useFetch('/api/ADMIN/clearQuiz ', {
+            method: 'delete',
+            headers: {
+                Authorization: `Bearer ${user.value.token}`
+            }
+        })
+        info.value = 'Quiz cleared'
+        clearInfoIn(3000)
     })
-    info.value = 'Quiz cleared'
-    clearInfoIn(3000)
 }
 
 function clearInfoIn(ms: number) {
