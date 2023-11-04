@@ -65,6 +65,13 @@ function updateQuestion() {
                     />
                 </div>
             </form>
+
+            <button
+                class="question-editor-close"
+                @click="$emit('close')"
+            >
+                Save
+            </button>
         </div>
     </section>
 </template>
@@ -95,6 +102,20 @@ function updateQuestion() {
 
     &-answers {
         margin-top: 10px;
+    }
+
+    &-close {
+        margin-top: 10px;
+        padding: 5px 10px;
+        border: 1px solid $secondary;
+        border-radius: 5px;
+        background-color: $secondary;
+        color: $primary;
+        cursor: pointer;
+
+        &:hover {
+            background-color: darken($color: $secondary, $amount: 10%);
+        }
     }
 }
 </style>
