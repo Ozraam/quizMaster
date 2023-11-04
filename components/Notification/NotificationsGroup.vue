@@ -16,9 +16,13 @@ const notifications = useNotifications()
     </transition-group>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .notifications {
     position: absolute;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
     bottom: 0;
     right: 0;
     padding: 20px;

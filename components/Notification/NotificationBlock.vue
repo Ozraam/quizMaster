@@ -1,12 +1,8 @@
 <script setup lang="ts">
 defineProps({
     notification: {
-        type: Object as PropType<{ title: string, text: string, id: number }>,
+        type: Object as PropType<{ title: string, text: string, id: number, warning: boolean }>,
         required: true
-    },
-    warning: {
-        type: Boolean as PropType<boolean>,
-        default: false
     }
 })
 
@@ -18,7 +14,7 @@ function deleteNotification() {
 <template>
     <li
         class="notification"
-        :class="{ 'notification--warning': warning }"
+        :class="{ 'notification--warning': notification.warning }"
     >
         <div class="notification__content">
             <div class="notification__title">
@@ -50,6 +46,8 @@ function deleteNotification() {
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     transition: .3s;
     background-color: $valid;
+    position: relative;
+    overflow: hidden;
 
     &__title {
         font-weight: 700;
@@ -69,8 +67,33 @@ function deleteNotification() {
         }
     }
 
+    &::after {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 5px;
+        background-color: $wrong;
+        left: 0;
+        bottom: 0;
+        animation: notification-progress 5s linear forwards;
+    }
+
     &--warning {
         background-color: $wrong;
+
+        &::after {
+            background-color: $valid;
+        }
+    }
+}
+
+@keyframes notification-progress {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
     }
 }
 </style>

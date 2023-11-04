@@ -12,20 +12,20 @@ useSeoMeta({
 async function addQuizToDatabase() {
     const quizTitleTrim = quizTitle.value.trim()
     if (quizTitleTrim === '') {
-        alert('Please enter a title for your quiz')
+        addNotification('error', 'Please enter a title for your quiz', true)
         return
     }
 
     const questions = questionsList.value!.getQuestions()
     if (questions.length === 0) {
-        alert('Please add at least one question')
+        addNotification('error', 'Please add at least one question', true)
         return
     }
 
     // description of the quiz
     const description = quizDescription.value.trim()
     if (description === '') {
-        alert('Please enter a description for your quiz')
+        addNotification('error', 'Please enter a description for your quiz', true)
         return
     }
 
@@ -38,20 +38,20 @@ async function addQuizToDatabase() {
     const goodQuestions = questions.map((question: { text: string, answers: { text: string, isCorrect: boolean }[] }) => {
         const questionText = question.text.trim()
         if (questionText === '') {
-            alert('Please enter a question')
+            addNotification('error', 'Please enter a question text to question ' + (questions.indexOf(question) + 1), true)
             return false
         }
 
         const answers = question.answers
         if (answers.length < 2) {
-            alert('Please add at least two answers')
+            addNotification('error', 'Please add at least two answers to question ' + (questions.indexOf(question) + 1), true)
             return false
         }
 
         const goodAnswers = Array.from(answers).map((answer: { text: string, isCorrect: boolean }) => {
             const answerText = answer.text.trim()
             if (answerText === '') {
-                alert('Please enter an answer')
+                addNotification('error', 'Please enter an answer text to question ' + (questions.indexOf(question) + 1), true)
                 return false
             }
             return true
@@ -74,9 +74,10 @@ async function addQuizToDatabase() {
 
     if (!res.error.value) {
         const quiz = res.data.value
+        addNotification('success', 'Quiz created !')
         await navigateTo('/quiz/' + quiz!.quizId)
     } else {
-        alert('An error occured')
+        addNotification('error', 'An error occured', true)
     }
 }
 </script>

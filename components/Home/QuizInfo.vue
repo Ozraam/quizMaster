@@ -27,7 +27,7 @@ async function deleteQuiz() {
         emit('delete')
         emit('close')
     } else {
-        alert('Failed to delete quiz')
+        addNotification('error', 'Failed to delete quiz', true)
     }
 }
 
@@ -40,7 +40,7 @@ async function createRoom() {
     })
 
     if (error.value) {
-        alert('Failed to create room')
+        addNotification('error', 'Failed to create room', true)
     } else {
         navigateTo('/room/' + data.value?.roomId)
     }

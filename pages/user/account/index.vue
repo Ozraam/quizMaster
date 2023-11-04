@@ -7,6 +7,7 @@ if (!user.value) {
 
 function logout() {
     useResetSession()
+    addNotification('success', 'Successfully logged out')
     navigateTo('/')
 }
 </script>
