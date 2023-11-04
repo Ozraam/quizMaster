@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps({
     confirmation: {
-        type: Object as PropType<{ title: string, text: string, callback: () => void }>,
+        type: Object as PropType<{ title: string, text: string, callback: () => void, close:() => void }>,
         required: true
     }
 })
@@ -24,6 +24,13 @@ defineProps({
             @click="confirmation.callback"
         >
             Yes
+        </button>
+
+        <button
+            class="notification-confirm__action"
+            @click="confirmation.close"
+        >
+            No
         </button>
     </div>
 </template>

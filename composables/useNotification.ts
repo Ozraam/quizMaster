@@ -1,5 +1,5 @@
 const notifications = ref<{title: string, text: string, id: number, warning: boolean, close:() => void}[]>([])
-const confirmation : Ref<{title: string, text: string, callback: () => void} | null> = ref(null)
+const confirmation : Ref<{title: string, text: string, callback: () => void, close:() => void} | null> = ref(null)
 const index = ref(0)
 export function useNotifications() {
     return notifications
@@ -37,6 +37,10 @@ export function useConfirm(title: string, text: string, callback: () => void) {
             clearTimeout(timeoutid)
             confirmation.value = null
             callback()
+        },
+        close: () => {
+            clearTimeout(timeoutid)
+            confirmation.value = null
         }
     }
 }
