@@ -10,14 +10,15 @@ const props = defineProps({
 const user = useUser()
 
 function deleteQuiz() {
-    if (!user.value || !user.value.isAdmin) {
+    if (!user.value || (!user.value.isAdmin && user.value.id !== props.quiz.createdBy)) {
         return
     }
 
     useConfirm('Test', 'Are you sure you want to delete this quiz?', async () => {
         const res = await useFetch(
-            '/api/ADMIN/deleteQuiz?id=' + props.quiz.id,
+            '/api/quiz?id=' + props.quiz.id,
             {
+                method: 'DELETE',
                 headers: {
                     Authorization: 'Bearer ' + user.value.token,
                 }
@@ -84,7 +85,7 @@ async function createRoom() {
                 </button>
 
                 <button
-                    v-if="user && user.isAdmin"
+                    v-if="user && (user.isAdmin || user.id === quiz.createdBy)"
                     class="quiz-info-button"
                     @click="deleteQuiz"
                 >

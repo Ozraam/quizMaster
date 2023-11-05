@@ -3,7 +3,7 @@
 const quizTitle = ref('Untitled')
 const quizDescription = ref('')
 const questionsList: Ref<{ getQuestions: () => { text: string, answers: { text: string, isCorrect: boolean }[] }[] } | null> = ref(null)
-
+const loggedUser = useUser()
 useSeoMeta({
     title: quizTitle.value + ' | Create your quiz !',
     description: 'Create your own quiz and share it with your friends'
@@ -32,7 +32,8 @@ async function addQuizToDatabase() {
     const data = {
         title: quizTitleTrim,
         description,
-        questions
+        questions,
+        createdBy: loggedUser.value.id
     }
 
     const goodQuestions = questions.map((question: { text: string, answers: { text: string, isCorrect: boolean }[] }) => {

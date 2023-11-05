@@ -86,12 +86,13 @@ export class DBManager {
      * @returns the id of the quiz that was added to the database
      */
     createQuiz(quiz: Quiz) {
-        this.db.prepare('INSERT INTO quiz (title, description, created, modified) VALUES (?, ?, ?, ?)')
+        this.db.prepare('INSERT INTO quiz (title, description, created, modified, createdBy) VALUES (?, ?, ?, ?, ?)')
             .run(
                 quiz.title,
                 quiz.description,
                 quiz.created.toISOString(),
-                quiz.modified.toISOString()
+                quiz.modified.toISOString(),
+                quiz.createdBy
             )
         const quizId = this.db.prepare('SELECT id, created from quiz ORDER BY id DESC LIMIT 1').get() as Quiz
         for (const question of quiz.questions) {

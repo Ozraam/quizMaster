@@ -18,6 +18,7 @@ export type Quiz = {
     description: string;
     created: Date;
     modified: Date;
+    createdBy: number;
     questions: Question[];
 }
 
