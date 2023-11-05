@@ -2,7 +2,7 @@
 <script setup lang="ts">
 const quizTitle = ref('Untitled')
 const quizDescription = ref('')
-const questionsList: Ref<{ getQuestions: () => { text: string, answers: { text: string, isCorrect: boolean }[] }[] } | null> = ref(null)
+const questionsList: Ref<{ getQuestions: () => { text: string, answers: { answer: string, isCorrect: boolean }[] }[] } | null> = ref(null)
 const loggedUser = useUser()
 useSeoMeta({
     title: quizTitle.value + ' | Create your quiz !',
@@ -36,7 +36,7 @@ async function addQuizToDatabase() {
         createdBy: loggedUser.value.id
     }
 
-    const goodQuestions = questions.map((question: { text: string, answers: { text: string, isCorrect: boolean }[] }) => {
+    const goodQuestions = questions.map((question: { text: string, answers: { answer: string, isCorrect: boolean }[] }) => {
         const questionText = question.text.trim()
         if (questionText === '') {
             addNotification('error', 'Please enter a question text to question ' + (questions.indexOf(question) + 1), true)
@@ -49,8 +49,8 @@ async function addQuizToDatabase() {
             return false
         }
 
-        const goodAnswers = Array.from(answers).map((answer: { text: string, isCorrect: boolean }) => {
-            const answerText = answer.text.trim()
+        const goodAnswers = Array.from(answers).map((answer: { answer: string, isCorrect: boolean }) => {
+            const answerText = answer.answer.trim()
             if (answerText === '') {
                 addNotification('error', 'Please enter an answer text to question ' + (questions.indexOf(question) + 1), true)
                 return false

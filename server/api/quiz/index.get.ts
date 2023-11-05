@@ -2,6 +2,7 @@ export default defineEventHandler((event) => {
     const { dbManager } = useDatabase()
 
     const quizId = getQuery(event).quizId as string | undefined
+    const hideAnswers = getQuery(event).hideAnswers === 'true'
 
     if (quizId === undefined) {
         throw createError({
@@ -10,7 +11,7 @@ export default defineEventHandler((event) => {
         })
     }
 
-    const quiz = dbManager.getQuiz(quizId!)
+    const quiz = dbManager.getQuiz(quizId!, hideAnswers)
 
     if (quiz === undefined) {
         throw createError({

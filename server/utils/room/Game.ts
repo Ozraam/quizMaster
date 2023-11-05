@@ -24,6 +24,12 @@ export class Game {
     sendQuestion(room: Room, io: Server) {
         const question = this.quiz.questions[this.currentQuestion]
         const sendQuestion = { ...question, index: this.currentQuestion + 1 }
+        sendQuestion.answers = sendQuestion.answers.map((answer: Answer) => {
+            return {
+                id: answer.id,
+                answer: answer.answer
+            } as Answer
+        })
         io.to(room.id.toString()).emit('question', sendQuestion)
         setTimeout(() => {
             this.requestAnswers(room, io)

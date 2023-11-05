@@ -1,6 +1,6 @@
 export type Answer = {
     id: number;
-    text: string;
+    answer: string;
     question_id: number;
     isCorrect: boolean;
 }

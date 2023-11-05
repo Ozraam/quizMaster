@@ -17,13 +17,13 @@ const isCorrectRef = computed({
 })
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-    (event: 'update:answer', answer: {text: string, isCorrect: boolean, id:number}): void;
+    (event: 'update:answer', answer: {answer: string, isCorrect: boolean, id:number}): void;
     (event: 'delete:answer'): void;
 }>()
 
 watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
     emit('update:answer', {
-        text,
+        answer: text,
         isCorrect: newIsCorrect,
         id: props.answer.id
     })

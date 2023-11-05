@@ -38,9 +38,10 @@ export class DBManager {
     /**
      * return the quiz with the given quizId
      * @param quizId quizId of the quiz to retrieve
+     * @param hideAnswersCorrectness if true, the correctness of the answers will not be returned
      * @returns quiz with the given quizId or null if quiz does not exist
      */
-    getQuiz(quizId: string) {
+    getQuiz(quizId: string, hideAnswersCorrectness = false) {
         const quiz: Quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
 
         if (!quiz) { return null }
@@ -49,7 +50,14 @@ export class DBManager {
         for (const question of questions) {
             const answers = this.db.prepare('SELECT * FROM answer WHERE question_id = ?').all(question.id) as Answer[]
 
-            question.answers = answers
+            question.answers = answers.map((answer) => {
+                return {
+                    id: answer.id,
+                    answer: answer.answer,
+                    isCorrect: hideAnswersCorrectness ? false : !!answer.isCorrect,
+                    question_id: answer.question_id
+                } as Answer
+            })
         }
         quiz.questions = questions
 
@@ -103,7 +111,7 @@ export class DBManager {
             const questionId = this.db.prepare('SELECT * from question ORDER BY id DESC LIMIT 1').get() as Question
             for (const answer of question.answers) {
                 this.db.prepare('INSERT INTO answer (answer, question_id, isCorrect) VALUES (?, ?, ?)')
-                    .run(answer.text,
+                    .run(answer.answer,
                         questionId.id,
                         answer.isCorrect ? 1 : 0
                     )

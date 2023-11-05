@@ -1,7 +1,12 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const quiz = (await useFetch('/api/quiz?quizId=' + route.params.quizId)).data as Ref<any>
+const quiz = (await useFetch('/api/quiz', {
+    query: {
+        quizId: route.params.quizId,
+        hideAnswers: 'true'
+    }
+})).data as Ref<any>
 
 const currentQuestion = ref(0)
 
@@ -26,7 +31,20 @@ const currentAnswer = computed({
 
 const finalAnswers : Ref<Array<any>> = ref([])
 
-function nextQuestion() {
+async function nextQuestion() {
+    if (currentQuestion.value + 1 >= quiz.value.questions.length) {
+        quiz.value = (await useFetch('/api/quiz', {
+            query: {
+                quizId: route.params.quizId,
+            }
+        })).data.value
+
+        finalAnswers.value.forEach((a) => {
+            a.answer = quiz.value.questions.find((q: any) => q.id === a.question.id).answers.find((ans: any) => ans.id === a.answer.id)
+            a.question = quiz.value.questions.find((q: any) => q.id === a.question.id)
+        })
+    }
+
     currentQuestion.value++
 }
 </script>

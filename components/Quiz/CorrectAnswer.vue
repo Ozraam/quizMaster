@@ -22,7 +22,7 @@ defineProps({
 
             <div>
                 Answer :
-                {{ question.answers.find((answer: any) => answer.isCorrect).answer }}
+                {{ question.answers.find((answer: any) => answer.isCorrect)?.answer }}
             </div>
 
             <div>
