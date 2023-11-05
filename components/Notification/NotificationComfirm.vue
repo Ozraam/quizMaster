@@ -19,19 +19,21 @@ defineProps({
             </div>
         </div>
 
-        <button
-            class="notification-confirm__action"
-            @click="confirmation.callback"
-        >
-            Yes
-        </button>
+        <div class="notification-confirm__actions">
+            <button
+                class="notification-confirm__action"
+                @click="confirmation.callback"
+            >
+                Yes
+            </button>
 
-        <button
-            class="notification-confirm__action"
-            @click="confirmation.close"
-        >
-            No
-        </button>
+            <button
+                class="notification-confirm__action"
+                @click="confirmation.close"
+            >
+                No
+            </button>
+        </div>
     </div>
 </template>
 
@@ -53,6 +55,11 @@ defineProps({
         padding: 3px;
         border-radius: 3px;
         border: 1px solid $secondary;
+
+        &:hover {
+            background-color: $secondary;
+            color: $primary;
+        }
     }
 
     &::after {
@@ -64,6 +71,11 @@ defineProps({
         height: 5px;
         background-color: $secondary;
         animation: notification-confirm__action 5s forwards linear;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 5px;
     }
 }
 
