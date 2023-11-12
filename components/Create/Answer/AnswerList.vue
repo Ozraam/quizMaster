@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-    answers: { text: string, isCorrect: boolean, id: number }[];
+    answers: { answer: string, isCorrect: boolean, id: number }[];
     questionIndex: number;
 }>()
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const props = defineProps<{
-    answer: { text: string, isCorrect: boolean, id:number };
+    answer: { answer: string, isCorrect: boolean, id:number };
     questionIndex: number;
 }>()
 
-const textRef = ref(props.answer.text)
+const textRef = ref(props.answer.answer)
 const isCorrectProps = ref(props.answer.isCorrect)
 
 const isCorrectRef = computed({
@@ -21,13 +21,17 @@ const emit = defineEmits<{
     (event: 'delete:answer'): void;
 }>()
 
-watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
+watch(textRef, () => {
+    emitUpdate()
+})
+
+function emitUpdate() {
     emit('update:answer', {
-        answer: text,
-        isCorrect: newIsCorrect,
+        answer: textRef.value,
+        isCorrect: isCorrectProps.value,
         id: props.answer.id
     })
-})
+}
 </script>
 
 <template>
@@ -39,7 +43,7 @@ watch([isCorrectRef, textRef], ([newIsCorrect, text]) => {
                     :name="'answer-correct' + questionIndex"
                     class="answer-correct-switch"
                     :checked="isCorrectRef"
-                    @change="isCorrectRef = !isCorrectRef"
+                    @change="() => {isCorrectRef = !isCorrectRef; emitUpdate()}"
                 >
             </div>
 
