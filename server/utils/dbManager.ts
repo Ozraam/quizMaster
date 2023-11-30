@@ -2,6 +2,13 @@
 import Database, { Database as DatabaseClass } from 'better-sqlite3'
 import { Answer, Question, Quiz, User, Score } from '~/utils/types'
 
+enum CommandTypes {
+    SELECT = 'SELECT',
+    INSERT = 'INSERT',
+    UPDATE = 'UPDATE',
+    DELETE = 'DELETE'
+}
+
 /**
  * DBManager is a singleton class that manages the database.
  * It is used to retrieve data from the database and to update the database.
@@ -42,13 +49,16 @@ export class DBManager {
      * @returns quiz with the given quizId or null if quiz does not exist
      */
     getQuiz(quizId: string, hideAnswersCorrectness = false) {
-        const quiz: Quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        // const quiz: Quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        const quiz: Quiz = SQLCommand.select('*').from('quiz').where('id = ?').get(this.db, quizId) as Quiz
 
         if (!quiz) { return null }
-        const questions: Question[] = this.db.prepare('SELECT * FROM question WHERE quiz_id = ?').all(quizId) as Question[]
+        // const questions: Question[] = this.db.prepare('SELECT * FROM question WHERE quiz_id = ?').all(quizId) as Question[]
+        const questions: Question[] = SQLCommand.select('*').from('question').where('quiz_id = ?').all(this.db, quizId) as Question[]
         if (!questions) { return null }
         for (const question of questions) {
-            const answers = this.db.prepare('SELECT * FROM answer WHERE question_id = ?').all(question.id) as Answer[]
+            // const answers = this.db.prepare('SELECT * FROM answer WHERE question_id = ?').all(question.id) as Answer[]
+            const answers = SQLCommand.select('*').from('answer').where('question_id = ?').all(this.db, question.id) as Answer[]
 
             question.answers = answers.map((answer) => {
                 return {
@@ -70,7 +80,8 @@ export class DBManager {
      */
     getQuizzes() {
         const quizzes: Quiz[] = []
-        const quizIds = this.db.prepare('SELECT id FROM quiz').all() as { id: string }[]
+        // const quizIds = this.db.prepare('SELECT id FROM quiz').all() as { id: string }[]
+        const quizIds = SQLCommand.select('id').from('quiz').all(this.db) as { id: string }[]
         for (const quizId of quizIds) {
             const quiz = this.getQuiz(quizId.id as string)
             if (quiz) { quizzes.push(quiz) }
@@ -83,9 +94,12 @@ export class DBManager {
      * Deletes all data from the database.
      */
     clearDatabase() {
-        this.db.exec('DELETE FROM quiz')
-        this.db.exec('DELETE FROM question')
-        this.db.exec('DELETE FROM answer')
+        // this.db.exec('DELETE FROM quiz')
+        // this.db.exec('DELETE FROM question')
+        // this.db.exec('DELETE FROM answer')
+        SQLCommand.delete().from('quiz').execute(this.db)
+        SQLCommand.delete().from('question').execute(this.db)
+        SQLCommand.delete().from('answer').execute(this.db)
     }
 
     /**
@@ -94,27 +108,44 @@ export class DBManager {
      * @returns the id of the quiz that was added to the database
      */
     createQuiz(quiz: Quiz) {
-        this.db.prepare('INSERT INTO quiz (title, description, created, modified, createdBy) VALUES (?, ?, ?, ?, ?)')
-            .run(
-                quiz.title,
-                quiz.description,
-                quiz.created.toISOString(),
-                quiz.modified.toISOString(),
-                quiz.createdBy
-            )
+        // this.db.prepare('INSERT INTO quiz (title, description, created, modified, createdBy) VALUES (?, ?, ?, ?, ?)')
+        //     .run(
+        //         quiz.title,
+        //         quiz.description,
+        //         quiz.created.toISOString(),
+        //         quiz.modified.toISOString(),
+        //         quiz.createdBy
+        //     )
+        SQLCommand.insert('title', 'description', 'created', 'modified', 'createdBy').into('quiz').values(
+            '?', '?', '?', '?', '?'
+        ).execute(this.db, quiz.title,
+            quiz.description,
+            quiz.created.toISOString(),
+            quiz.modified.toISOString(),
+            quiz.createdBy
+        )
+        // TODO add order to SQLCommand
         const quizId = this.db.prepare('SELECT id, created from quiz ORDER BY id DESC LIMIT 1').get() as Quiz
         for (const question of quiz.questions) {
-            this.db.prepare('INSERT INTO question (question, quiz_id) VALUES (?, ?)')
-                .run(question.text,
-                    quizId.id
-                )
+            // this.db.prepare('INSERT INTO question (question, quiz_id) VALUES (?, ?)')
+            //     .run(question.text,
+            //         quizId.id
+            //     )
+            SQLCommand.insert('question', 'quiz_id').into('question').values('?', '?').execute(this.db, question.text, quizId.id)
+            // TODO add order to SQLCommand
             const questionId = this.db.prepare('SELECT * from question ORDER BY id DESC LIMIT 1').get() as Question
             for (const answer of question.answers) {
-                this.db.prepare('INSERT INTO answer (answer, question_id, isCorrect) VALUES (?, ?, ?)')
-                    .run(answer.answer,
-                        questionId.id,
-                        answer.isCorrect ? 1 : 0
-                    )
+                // this.db.prepare('INSERT INTO answer (answer, question_id, isCorrect) VALUES (?, ?, ?)')
+                //     .run(answer.answer,
+                //         questionId.id,
+                //         answer.isCorrect ? 1 : 0
+                //     )
+                SQLCommand.insert('answer', 'question_id', 'isCorrect').into('answer').values(
+                    '?', '?', '?'
+                ).execute(this.db, answer.answer,
+                    questionId.id,
+                    answer.isCorrect ? 1 : 0
+                )
             }
         }
 
@@ -129,7 +160,8 @@ export class DBManager {
      */
     updateScoreOfUser(quizId: number, user: User, score: number) {
         // update score of user in database if score is higher than previous score
-        const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        // const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        const quiz = SQLCommand.select('*').from('quiz').where('id = ?').get(this.db, quizId) as Quiz
 
         if (!quiz) {
             return {
@@ -139,15 +171,18 @@ export class DBManager {
         }
 
         // check if score is higher than previous score
-        const scoreInDB = this.db.prepare('SELECT * FROM score WHERE quizId = ? AND userId = ?').get(quizId, user.id) as Score
+        // const scoreInDB = this.db.prepare('SELECT * FROM score WHERE quizId = ? AND userId = ?').get(quizId, user.id) as Score
+        const scoreInDB = SQLCommand.select('*').from('score').where('quizId = ? AND userId = ?').get(this.db, quizId, user.id) as Score
 
         if (scoreInDB !== undefined) {
             if (scoreInDB.score < score) {
-                this.db.prepare('UPDATE score SET score = ? WHERE id = ?').run(score, scoreInDB.id)
+                // this.db.prepare('UPDATE score SET score = ? WHERE id = ?').run(score, scoreInDB.id)
+                SQLCommand.update('score').set('score').where('id = ?').execute(this.db, score, scoreInDB.id)
             }
         } else {
-            this.db.prepare('INSERT INTO score (quizId, userId, score) VALUES (?, ?, ?)')
-                .run(quizId, user.id, score)
+            // this.db.prepare('INSERT INTO score (quizId, userId, score) VALUES (?, ?, ?)')
+            //     .run(quizId, user.id, score)
+            SQLCommand.insert('quizId', 'userId', 'score').into('score').values('?', '?', '?').execute(this.db, quizId, user.id, score)
         }
     }
 
@@ -157,7 +192,8 @@ export class DBManager {
      * @returns all scores of the user with the given id
      */
     getScoresOfUser(id: number) {
-        const scores = this.db.prepare('SELECT * FROM score WHERE userId = ?').all(id) as Score[]
+        // const scores = this.db.prepare('SELECT * FROM score WHERE userId = ?').all(id) as Score[]
+        const scores = SQLCommand.select('*').from('score').where('userId = ?').all(this.db, id) as Score[]
         return scores
     }
 
@@ -165,10 +201,14 @@ export class DBManager {
      * Deletes all quizzes and scores from the database.
      */
     clearQuizzes() {
-        this.db.exec('DELETE FROM score')
-        this.db.exec('DELETE FROM quiz')
-        this.db.exec('DELETE FROM question')
-        this.db.exec('DELETE FROM answer')
+        // this.db.exec('DELETE FROM score')
+        // this.db.exec('DELETE FROM quiz')
+        // this.db.exec('DELETE FROM question')
+        // this.db.exec('DELETE FROM answer')
+        SQLCommand.delete().from('score').execute(this.db)
+        SQLCommand.delete().from('quiz').execute(this.db)
+        SQLCommand.delete().from('question').execute(this.db)
+        SQLCommand.delete().from('answer').execute(this.db)
     }
 
     /**
@@ -176,7 +216,8 @@ export class DBManager {
      * @returns all users in the database
      */
     getAllUsers() {
-        const users = this.db.prepare('SELECT * FROM users').all() as User[]
+        // const users = this.db.prepare('SELECT * FROM users').all() as User[]
+        const users = SQLCommand.select('*').from('users').all(this.db) as User[]
         users.forEach((user) => {
             user.password = ''
         })
@@ -189,7 +230,8 @@ export class DBManager {
      * @returns the user with the given id or null if user does not exist
      */
     getUserWithId(id: number) {
-        const user = this.db.prepare('SELECT * FROM users WHERE id = ?').get(id) as User
+        // const user = this.db.prepare('SELECT * FROM users WHERE id = ?').get(id) as User
+        const user = SQLCommand.select('*').from('users').where('id = ?').get(this.db, id) as User
         return user
     }
 
@@ -199,10 +241,11 @@ export class DBManager {
      * @returns true if the user was updated, false if the user does not exist
      */
     updateUser(user: User): boolean {
-        const userInDB = this.db.prepare('SELECT * FROM users WHERE id = ?').get(user.id)
+        // const userInDB = this.db.prepare('SELECT * FROM users WHERE id = ?').get(user.id)
+        const userInDB = SQLCommand.select('*').from('users').where('id = ?').get(this.db, user.id) as User
         if (!userInDB) { return false }
-        this.db.prepare('UPDATE users SET username = ? WHERE id = ?')
-            .run(user.username, user.id)
+        // this.db.prepare('UPDATE users SET username = ? WHERE id = ?').run(user.username, user.id)
+        SQLCommand.update('users').set('username').where('id = ?').execute(this.db, user.username, user.id)
         return true
     }
 
@@ -211,7 +254,8 @@ export class DBManager {
      * @param id id of the user to delete
      */
     deleteUser(id: any) {
-        this.db.prepare('DELETE FROM users WHERE id = ?').run(id)
+        // this.db.prepare('DELETE FROM users WHERE id = ?').run(id)
+        SQLCommand.delete().from('users').where('id = ?').execute(this.db, id)
     }
 
     /**
@@ -222,10 +266,14 @@ export class DBManager {
     deleteQuiz(quizId: string) {
         const quiz = this.getQuiz(quizId)
         if (!quiz) { return null }
-        this.db.prepare('DELETE FROM score WHERE quizId = ?').run(quizId)
-        this.db.prepare('DELETE FROM quiz WHERE id = ?').run(quizId)
-        this.db.prepare('DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?)').run(quizId)
-        this.db.prepare('DELETE FROM question WHERE quiz_id = ?').run(quizId)
+        // this.db.prepare('DELETE FROM score WHERE quizId = ?').run(quizId)
+        // this.db.prepare('DELETE FROM quiz WHERE id = ?').run(quizId)
+        // this.db.prepare('DELETE FROM answer WHERE question_id in (SELECT id FROM question WHERE quiz_id = ?)').run(quizId)
+        // this.db.prepare('DELETE FROM question WHERE quiz_id = ?').run(quizId)
+        SQLCommand.delete().from('score').where('quizId = ?').execute(this.db, quizId)
+        SQLCommand.delete().from('quiz').where('id = ?').execute(this.db, quizId)
+        SQLCommand.delete().from('answer').where('question_id in (SELECT id FROM question WHERE quiz_id = ?)').execute(this.db, quizId)
+        SQLCommand.delete().from('question').where('quiz_id = ?').execute(this.db, quizId)
         return quiz
     }
 
@@ -235,10 +283,11 @@ export class DBManager {
      * @returns true if the user was updated, false if the user does not exist
      */
     updateUserRole(user: User) {
-        const userInDB = this.db.prepare('SELECT * FROM users WHERE id = ?').get(user.id)
+        // const userInDB = this.db.prepare('SELECT * FROM users WHERE id = ?').get(user.id)
+        const userInDB = SQLCommand.select().select('*').from('users').where('id = ?').get(this.db, user.id) as User
         if (!userInDB) { return false }
-        this.db.prepare('UPDATE users SET role = ? WHERE id = ?')
-            .run(user.role, user.id)
+        // this.db.prepare('UPDATE users SET role = ? WHERE id = ?').run(user.role, user.id)
+        SQLCommand.update('users').set('role').where('id = ?').execute(this.db, user.role, user.id)
         return true
     }
 
@@ -247,7 +296,8 @@ export class DBManager {
      * @returns all roles in the database
      */
     getAllRoles() {
-        const roles = this.db.prepare('SELECT * FROM roles').all()
+        // const roles = this.db.prepare('SELECT * FROM roles').all()
+        const roles = SQLCommand.select('*').from('roles').all(this.db)
         return roles
     }
 
@@ -257,7 +307,107 @@ export class DBManager {
      * @returns true if the quiz exists, false if the quiz does not exist
      */
     isQuizExist(quizId: string) {
-        const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        // const quiz = this.db.prepare('SELECT * FROM quiz WHERE id = ?').get(quizId) as Quiz
+        const quiz = SQLCommand.select('*').from('quiz').where('id = ?').get(this.db, quizId) as Quiz
         return quiz !== undefined
+    }
+}
+
+export class SQLCommand {
+    private command: string
+
+    constructor(type: CommandTypes = CommandTypes.SELECT) {
+        if (type === CommandTypes.SELECT) {
+            this.command = type + ' [columns] FROM [table] WHERE [conditions]'
+        } else if (type === CommandTypes.INSERT) {
+            this.command = type + ' INTO [table] ([columns]) VALUES ([values])'
+        } else if (type === CommandTypes.UPDATE) {
+            this.command = type + ' [table] SET [columns] WHERE [conditions]'
+        } else if (type === CommandTypes.DELETE) {
+            this.command = type + ' FROM [table] WHERE [conditions]'
+        } else {
+            throw new Error('Invalid command type')
+        }
+    }
+
+    static select(...columns: any[]) {
+        return new SQLCommand(CommandTypes.SELECT).select(...columns)
+    }
+
+    static insert(...columns: any[]) {
+        return new SQLCommand(CommandTypes.INSERT).select(...columns)
+    }
+
+    static update(table: string) {
+        return new SQLCommand(CommandTypes.UPDATE).from(table)
+    }
+
+    static delete() {
+        return new SQLCommand(CommandTypes.DELETE)
+    }
+
+    select(...columns: any[]) {
+        this.command = this.command.replace('[columns]', columns.join(', '))
+
+        return this
+    }
+
+    from(table: string) {
+        this.command = this.command.replace('[table]', table)
+
+        return this
+    }
+
+    where(conditions: string) {
+        this.command = this.command.replace('[conditions]', conditions)
+
+        return this
+    }
+
+    values(...values: any[]) {
+        this.command = this.command.replace('[values]', values.join(', '))
+
+        return this
+    }
+
+    insert(...columns: any[]) {
+        return this.select(...columns)
+    }
+
+    into(table: string) {
+        return this.from(table)
+    }
+
+    update(table: string) {
+        return this.from(table)
+    }
+
+    set(...columns: any[]) {
+        return this.select(...columns.map((column) => {
+            return column + ' = ?'
+        }))
+    }
+
+    preProcessCommand() {
+        this.command = this.command.replace('[columns]', '*')
+        this.command = this.command.replace('[table]', '')
+        this.command = this.command.replace('[conditions]', '1 = 1')
+        this.command = this.command.replace('[values]', '')
+    }
+
+    execute(db: DatabaseClass, ...params: any[]) {
+        this.preProcessCommand()
+
+        return db.prepare(this.command).run(params)
+    }
+
+    get(db: DatabaseClass, ...params: any[]) {
+        this.preProcessCommand()
+        return db.prepare(this.command).get(params)
+    }
+
+    all(db: DatabaseClass, ...params: any[]) {
+        this.preProcessCommand()
+        return db.prepare(this.command).all(params)
     }
 }

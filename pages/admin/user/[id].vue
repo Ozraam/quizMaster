@@ -80,7 +80,6 @@ function deleteUser() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     max-width: 40rem;
     padding: 2rem;
     border-radius: 1rem;

@@ -69,7 +69,7 @@ function clearInfoIn(ms: number) {
     </main>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
@@ -84,5 +84,9 @@ h2 {
     font-size: large;
     margin-bottom: 1rem;
     color: green;
+}
+
+main {
+    color: $primary;
 }
 </style>

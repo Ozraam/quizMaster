@@ -37,7 +37,7 @@ defineEmits(['click'])
     padding: 0.5rem 1rem;
     border: 1px solid #818181;
     border-radius: 0.5rem;
-    color: black;
+    color: $primary;
     background-color: transparent;
     font-size: 1rem;
     cursor: pointer;
@@ -45,7 +45,7 @@ defineEmits(['click'])
 
     &:hover {
         background-color: #818181;
-        color: white;
+        color: $secondary;
     }
 }
 </style>

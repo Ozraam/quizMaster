@@ -28,7 +28,7 @@ const users = (
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .option-users {
     text-align: center;
 }
@@ -49,5 +49,6 @@ const users = (
     padding: 1rem 0;
     max-height: 25vh;
     overflow-y: auto;
+    color: $secondary;
 }
 </style>
