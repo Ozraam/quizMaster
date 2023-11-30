@@ -60,6 +60,7 @@ const confirnation = useConfirmation()
     left: 50%;
     transform: translateX(-50%);
     padding: 20px;
+    z-index: 100;
 }
 
 .confirm-enter-active,
